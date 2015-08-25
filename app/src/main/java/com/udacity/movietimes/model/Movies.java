@@ -12,9 +12,9 @@ import java.util.List;
 public class Movies {
 
     @SerializedName("results")
-    private List<Movie> movies;
+    private List<Movie> movieList;
 
-    public List<Movie> getMovies() {
-        return movies;
+    public List<Movie> getMovieList() {
+        return movieList;
     }
 }

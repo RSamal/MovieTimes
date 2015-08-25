@@ -40,7 +40,31 @@ public class MainActivity extends AppCompatActivity {
          */
         mTabLayout = (TabLayout) findViewById(R.id.sliding_tab);
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        /**
+         *  Implement Tab Listner for page selection
+         */
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
 
     }

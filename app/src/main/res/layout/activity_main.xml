@@ -15,15 +15,17 @@
     <!-- Adding a Tablayout for Popular and Highest Rate movie Selector -->
     <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tab"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorHeight="4dp"
-        app:tabMode="scrollable"/>
+        android:background="@color/primaryColor"
+        style="@style/MovieTabLayout"
+        app:tabMode="scrollable"
+        app:tabGravity="fill"/>
 
     <!-- Adding a view Pager for Tab navigation -->
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 

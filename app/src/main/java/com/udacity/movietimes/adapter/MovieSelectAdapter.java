@@ -17,7 +17,7 @@ import com.udacity.movietimes.fragments.PopularMovie;
 public class MovieSelectAdapter extends FragmentPagerAdapter {
 
     private static final int TAB_COUNT = 2;
-    private String[] mTabTitle = {"POPULAR","HIGH RATE"};
+    private String[] mTabTitle = {"HIGH RATE","POPULAR"};
 
     public MovieSelectAdapter(FragmentManager fm) {
         super(fm);

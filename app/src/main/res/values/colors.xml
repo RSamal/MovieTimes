@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <!-- Application Color Settings -->
     <color name="primaryColor">#4CAF50</color>
     <color name="primaryColorDark">#388E3C</color>
-    <color name="accentColor">#4CAF50</color>
+    <color name="accentColor">#8BC34A</color>
+    <color name="lightPrimaryColor">#C8E6C9</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondaryText">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
+
+    <!-- TabLayout Color Setting -->
+    <color name="tabIndicatorColor">#FFFFFF</color>
+
 </resources>
