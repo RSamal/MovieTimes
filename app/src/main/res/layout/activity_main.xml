@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.udacity.movietimes.views.MainActivity">
+    tools:mContext="com.udacity.movietimes.views.MainActivity">
 
 
     <!-- Include the Toolbar as an AppBar -->

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Background Colors -->
+    <color name="bckgRed">#F44336</color>
+    <color name="bckgPurple">#9C27B0</color>
+    <color name="bckgDeepPurple">#512DA8</color>
+    <color name="bckgIndigo">#303F9F</color>
+    <color name="bckgBlue">#1976D2</color>
+    <color name="bckgLightBlue">#0288D1</color>
+    <color name="bckgCyan">#0097A7</color>
+    <color name="bckgTeal">#00796B</color>
+    <color name="bckgLime">#AFB42B</color>
+    <color name="bckgOrange">#F57C00</color>
+    <color name="bckgDeepOrange">#E64A19</color>
+    <color name="bckgBrown">#5D4037</color>
+    <color name="bckgGrey">#455A64</color>
+    <color name="bckgGreyTwo">#616161</color>
+
+
+    <array name="backgroundColors">
+        <item>@color/bckgRed</item>
+        <item>@color/bckgPurple</item>
+        <item>@color/bckgDeepPurple</item>
+        <item>@color/bckgIndigo</item>
+        <item>@color/bckgBlue</item>
+        <item>@color/bckgLightBlue</item>
+        <item>@color/bckgCyan</item>
+        <item>@color/bckgTeal</item>
+        <item>@color/bckgLime</item>
+        <item>@color/bckgOrange</item>
+        <item>@color/bckgDeepOrange</item>
+        <item>@color/bckgBrown</item>
+        <item>@color/bckgGrey</item>
+        <item>@color/bckgGreyTwo</item>
+    </array>
+</resources>

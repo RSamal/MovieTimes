@@ -1,11 +1,11 @@
 package com.udacity.movietimes.fragments;
 
 
-import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +20,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieRecycleviewAdapter;
@@ -28,28 +27,28 @@ import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.model.Movies;
 import com.udacity.movietimes.utils.MovieConfig;
 import com.udacity.movietimes.utils.MovieUrl;
+import com.udacity.movietimes.views.DetailActivity;
 import com.udacity.movietimes.webservices.ConnectionManager;
-
-import java.lang.reflect.Array;
-import java.util.List;
 
 /**
  * This fragment Class will show the details of popular movie for the user Tab selection. Upon selecting the tab
  * Popular , user will view the details fetched from network or database
  */
-public class PopularMovie extends Fragment {
+
+public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.MovieItemClickListner {
 
 
     private static final String TAG = PopularMovie.class.getSimpleName();
+    private static final String MOVIE_MESSG = "com.udacity.movietimes.MESSAGE";
 
     private RequestQueue mRequestQueue;
     private RecyclerView mRecyclerView;
     private MovieRecycleviewAdapter mMovieRecycleviewAdapter;
+    private CardView mCardView;
 
 
     public PopularMovie() {
         // Required empty public constructor
-
     }
 
 
@@ -58,7 +57,7 @@ public class PopularMovie extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_popular_movie, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
 
         /**
@@ -81,6 +80,7 @@ public class PopularMovie extends Fragment {
          */
         getPopularMovies();
 
+
         return view;
 
     }
@@ -89,7 +89,7 @@ public class PopularMovie extends Fragment {
      * This method will be use to get the popular movie details using MovieDb API from MovieDb.
      * It uses google Volley for the networking call
      *
-     * @return List<Movie>
+     * @return null
      */
     public void getPopularMovies() {
 
@@ -101,6 +101,7 @@ public class PopularMovie extends Fragment {
         final Uri.Builder movieUrl = Uri.parse(MovieUrl.BASE_URL).buildUpon()
                 .appendQueryParameter(MovieUrl.SORT_BY_PARM, popularity_desc)
                 .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
+
 
         /**
          *  Do the network call for request/response using Volley
@@ -115,7 +116,7 @@ public class PopularMovie extends Fragment {
                 Movies movies = new Gson().fromJson(response, Movies.class);
 
                 //Set the view adapter
-                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(),movies.getMovieList());
+                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movies.getMovieList());
                 mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
 
                 //TODO : Put the Movie list into a Database
@@ -135,5 +136,16 @@ public class PopularMovie extends Fragment {
 
     }
 
+    @Override
+    public void onItemClicked(Movie movie) {
 
+        //TODO Start the detail activity
+
+        Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putParcelable(MOVIE_MESSG,movie);
+        mIntent.putExtras(mBundle);
+        startActivity(mIntent);
+
+    }
 }

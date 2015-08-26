@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.udacity.movietimes.fragments.YoutubeFragment">
+
+    <RelativeLayout
+        android:id="@+id/youtube_fragment_vedio_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- ImageView or your youtubeThumnailView -->
+        <com.google.android.youtube.player.YouTubeThumbnailView
+            android:id="@+id/youtube_fragment_youtube_tn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- ImageView of your button -->
+        <ImageView
+            android:id="@+id/youtube_fragment_play_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/play" />
+
+    </RelativeLayout>
+
+</FrameLayout>
