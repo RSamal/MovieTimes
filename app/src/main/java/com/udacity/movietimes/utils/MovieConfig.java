@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.udacity.movietimes.utils;
 
 /**
@@ -14,11 +29,11 @@ public abstract class MovieConfig {
     /**
      *  MovieDB API key. Please replace with yours
      */
-    public static final String MOVIEDB_API_KEY = "fc86e4467ef28534ca0cfec1bb32d023";
+    public static final String MOVIEDB_API_KEY = "XXXXXXXXX";
 
     /**
-     * Google Developer API Key. Please replace with yours
+     * Google Developer API Key. Please replace with yours to get access to Youtube
      */
-    public static final String GOOGLE_API_KEY ="AIzaSyDYA5kvFYOnznjuTxsC8btURc4Y90IQ_iE";
+    public static final String GOOGLE_API_KEY = "XXXXXXXXX";
 
 }

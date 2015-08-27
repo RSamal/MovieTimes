@@ -1,37 +1,40 @@
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:mContext="com.udacity.movietimes.views.MainActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <!-- Include the Toolbar as an AppBar -->
-    <include layout="@layout/tool_bar"
-        android:id="@+id/tool_bar"/>
+        <!-- Include the Toolbar as an AppBar -->
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
-    <!-- Adding a Tablayout for Popular and Highest Rate movie Selector -->
-    <android.support.design.widget.TabLayout
-        android:id="@+id/sliding_tab"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
-        style="@style/MovieTabLayout"
-        app:tabMode="scrollable"
-        app:tabGravity="fill"/>
+        <!-- Adding a Tablayout for Popular and Highest Rate movie Selector -->
+        <android.support.design.widget.TabLayout
+            android:id="@+id/sliding_tab"
+            style="@style/MovieTabLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            app:tabGravity="fill"
+            app:tabMode="scrollable" />
+    </android.support.design.widget.AppBarLayout>
 
     <!-- Adding a view Pager for Tab navigation -->
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-
-
-
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

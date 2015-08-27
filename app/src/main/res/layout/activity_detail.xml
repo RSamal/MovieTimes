@@ -5,14 +5,13 @@
     tools:context="com.udacity.movietimes.views.DetailActivity">
 
 
-
-    <!-- Include the youtube fragment for the youtube vedio thumbnail -->
+    <!-- Include the youtube thumbnail for Trailer of the movie -->
     <RelativeLayout
         android:id="@+id/detail_activity_vedio"
         android:layout_width="fill_parent"
         android:layout_height="200dp">
 
-        <!-- ImageView or your youtubeThumnailView -->
+        <!-- ImageView or your Thumbnail -->
         <ImageView
             android:id="@+id/detail_activity_vedio_img"
             android:layout_width="match_parent"
@@ -70,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_toRightOf="@id/detail_activity_poster"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -81,6 +81,7 @@
                 android:layout_below="@id/detail_activity_title"
                 android:layout_marginTop="2dp"
                 android:layout_toRightOf="@id/detail_activity_poster"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="14sp" />
 
@@ -117,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_activity_separatorTwo"
                 android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="14sp" />
 

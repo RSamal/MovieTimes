@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.udacity.movietimes.fragments;
 
 
@@ -9,11 +24,9 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -60,10 +73,7 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
 
-        /**
-         *  Setup for the RecyclerView
-         */
-
+        /** Setup for the RecyclerView */
         //instantiate the recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_popular_movie_rv);
         mRecyclerView.setHasFixedSize(true);
@@ -72,14 +82,8 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        //Set the recycler view adapter
-
-
-        /**
-         * Fetch the popular movie from MovieDB and update it on UI
-         */
+        /** Fetch the popular movie from MovieDB and update it on UI */
         getPopularMovies();
-
 
         return view;
 
@@ -93,9 +97,7 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
      */
     public void getPopularMovies() {
 
-        /**
-         * Build the URL for the popular movie using Uri.Builder
-         */
+        /** Build the URL for the popular movie using Uri.Builder */
         final String popularity_desc = "popularity.desc";
 
         final Uri.Builder movieUrl = Uri.parse(MovieUrl.BASE_URL).buildUpon()
@@ -103,9 +105,7 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
                 .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
 
 
-        /**
-         *  Do the network call for request/response using Volley
-         */
+        /** Do the network call for request/response using Volley */
         Movies movies = null;
         mRequestQueue = ConnectionManager.getRequestQueue(getActivity().getApplicationContext());
 
@@ -132,7 +132,6 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
         });
 
         mRequestQueue.add(request);
-
 
     }
 

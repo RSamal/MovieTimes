@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.udacity.movietimes.fragments;
 
 
@@ -5,15 +20,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,9 +45,8 @@ import com.udacity.movietimes.webservices.ConnectionManager;
 /**
  * This fragment is a part of ViewPager and responsible to load the HighRated Movie from MovieDb.
  * It contents are loaded dynamically through network call, which uses Google Volley Api for it.
- *
+ * <p/>
  * A simple {@link Fragment} subclass.
- *
  */
 public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapter.MovieItemClickListner {
 
@@ -45,7 +56,6 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
     private RequestQueue mRequestQueue;
     private RecyclerView mRecyclerView;
     private MovieRecycleviewAdapter mMovieRecycleviewAdapter;
-    private CardView mCardView;
 
 
     public HighestRateMovie() {
@@ -56,14 +66,11 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
-
-        /**
-         *  Setup for the RecyclerView
-         */
-
+        /** Setup for the RecyclerView */
         //instantiate the recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_popular_movie_rv);
         mRecyclerView.setHasFixedSize(true);
@@ -73,9 +80,7 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
-        /**
-         * Fetch the popular movie from MovieDB and update it on UI
-         */
+        /** Fetch the popular movie from MovieDB and update it on UI */
         getHighRateMovies();
 
         return view;
@@ -89,23 +94,19 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
      */
     public void getHighRateMovies() {
 
-        /**
-         * Build the URL for the high rate movie using Uri.Builder
-         */
+        /** Build the URL for the high rate movie using Uri.Builder */
         final String certificationCountry = "us";
         final String certification = "R";
         final String voteAvg = "vote_average.desc";
 
         final Uri.Builder movieUrl = Uri.parse(MovieUrl.BASE_URL).buildUpon()
-                .appendQueryParameter(MovieUrl.CERT_COUNTRY_PARM,certificationCountry)
-                .appendQueryParameter(MovieUrl.CERT_PARM,certification)
+                .appendQueryParameter(MovieUrl.CERT_COUNTRY_PARM, certificationCountry)
+                .appendQueryParameter(MovieUrl.CERT_PARM, certification)
                 .appendQueryParameter(MovieUrl.SORT_BY_PARM, voteAvg)
                 .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
 
-        Log.d("TAG",movieUrl.toString());
-        /**
-         *  Do the network call for request/response using Volley
-         */
+
+        /** Do the network call for request/response using Volley */
         Movies movies = null;
         mRequestQueue = ConnectionManager.getRequestQueue(getActivity().getApplicationContext());
 
@@ -116,7 +117,7 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
                 Movies movies = new Gson().fromJson(response, Movies.class);
 
                 //Set the view adapter
-                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(),HighestRateMovie.this,movies.getMovieList());
+                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), HighestRateMovie.this, movies.getMovieList());
                 mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
 
                 //TODO : Put the Movie list into a Database
@@ -130,13 +131,15 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
             }
 
         });
-
         mRequestQueue.add(request);
-
 
     }
 
-
+    /**
+     * This is a listner method which gets called when the user click on a movie item from the list.
+     *
+     * @param movie
+     */
     @Override
     public void onItemClicked(Movie movie) {
 
@@ -145,7 +148,5 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
         mBundle.putParcelable(MOVIE_MESSG, movie);
         mIntent.putExtras(mBundle);
         startActivity(mIntent);
-
-
     }
 }

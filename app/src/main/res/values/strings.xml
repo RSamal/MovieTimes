@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">MovieTimes</string>
-    <string name="title_activity_main">MainActivity</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">MovieTimes</string>
     <string name="action_settings">Settings</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Activity detail -->
     <string name="title">Title</string>
     <string name="rating">Rating</string>
     <string name="title_activity_detail">DetailActivity</string>

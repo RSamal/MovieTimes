@@ -1,13 +1,28 @@
+/*
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.udacity.movietimes.views;
 
-import android.content.Context;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,18 +37,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.model.Trailer;
 import com.udacity.movietimes.utils.MovieConfig;
-import com.udacity.movietimes.utils.MovieTrailer;
 import com.udacity.movietimes.utils.MovieUrl;
 import com.udacity.movietimes.webservices.ConnectionManager;
 
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,7 +73,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private RequestQueue mRequestQueue;
     private Trailer mTrailer;
-    private String  mVedioId;
+    private String mVedioId;
 
 
     @Override
@@ -69,27 +81,29 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        /**
-         * Setup Toolbar as an AppBar
-         */
+        /** Setup Toolbar as an AppBar */
         mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle("");
         mToolBar.setBackgroundColor(Color.TRANSPARENT);
         mToolBar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(mToolBar);
 
-        /**
-         * Get the movie data from intent passed through MainActivity
-         */
-        mMovie = (Movie) getIntent().getParcelableExtra(MOVIE_MESSG);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /**
-         * Update the UI components of Movie Detail
-         */
+        /** Get the movie data from intent passed through MainActivity*/
+        mMovie = getIntent().getParcelableExtra(MOVIE_MESSG);
+
+        /** Update the UI components of Movie Detail */
         updateMovieDetailUi();
 
     }
 
+    /**
+     * This method is used to update the UI components of the Movie Detail Activity
+     *
+     * @return Null
+     */
     public void updateMovieDetailUi() {
 
         mPoster = (ImageView) findViewById(R.id.detail_activity_poster);
@@ -102,30 +116,19 @@ public class DetailActivity extends AppCompatActivity {
         mNoTrailerMessage = (TextView) findViewById(R.id.detail_activity_msg_tv);
 
 
-        /**
-         * Set the Vedio Trailer of the movie from youtube
-         */
-
+        /** Set the Vedio Trailer of the movie from youtube */
         setMovieTrailer(mMovie.getmId());
 
-
-        /**
-         * Set the poster of the movie using Picasso
-         */
+        /** Set the poster of the movie using Picasso */
         // Get the IMAGE url
         StringBuilder imagePath = new StringBuilder(MovieUrl.MOVIE_IMAGE_BASE_URL)
                 .append(mMovie.getmPosterPath());
-
         Picasso.with(this).load(imagePath.toString()).into(mPoster);
 
-        /**
-         * Set the title of the movie
-         */
+        /** Set the title of the movie */
         mTitle.setText(mMovie.getmTitle());
 
-        /**
-         * Set the release Date of the movie
-         */
+        /** Set the release Date of the movie */
 
         SimpleDateFormat mInputFormat = new SimpleDateFormat("yyyy-mm-dd");
         SimpleDateFormat mOutputFormat = new SimpleDateFormat("MMM yyyy");
@@ -138,51 +141,35 @@ public class DetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        /**
-         * Set the Rating of the Movie
-         */
+        /**Set the Rating of the Movie*/
         mRatingBar.setRating((float) (Float.valueOf(mMovie.getmVoteAvg()) / 2.0));
 
-        /**
-         * Setting up the overview
-         */
+        /** Setting up the overview */
         mOverview.setText(mMovie.getmOverview());
-
-
     }
 
     /**
      * This function will return the movie trailer Id fetched from MovieDb Api
      *
      * @param movieId
-     * @return
+     * @return null
      */
     public void setMovieTrailer(final String movieId) {
 
-
-        /**
-         * To get the Movie Trailer Id from Movie Db
-         */
+        /** To get the Movie Trailer Id from Movie Db */
         final Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_ID_URL).buildUpon()
                 .appendPath(movieId)
                 .appendPath(MovieUrl.VIDEOS)
                 .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
 
-        Log.d("TEST", mTrailerUrl.toString());
-
         mRequestQueue = ConnectionManager.getRequestQueue(getApplicationContext());
-
         StringRequest request = new StringRequest(Request.Method.GET, mTrailerUrl.toString(), new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 mTrailer = new Gson().fromJson(response, Trailer.class);
 
-                /**
-                 * To get the Thumbnail from Youtube and set it on Image throug Picasso
-                 */
-
-
+                /**To get the Thumbnail from Youtube and set it on Image throug Picasso */
                 if (mTrailer.getmVedios().size() != 0) {
                     mVedioId = mTrailer.getmVedios().get(0).getmKey();
 
@@ -195,25 +182,24 @@ public class DetailActivity extends AppCompatActivity {
                     mVedio.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = YouTubeStandalonePlayer.createVideoIntent(DetailActivity.this, MovieConfig.GOOGLE_API_KEY, mVedioId);
-                            startActivity(intent);
+                            try {
+                                Intent intent = YouTubeStandalonePlayer.createVideoIntent(DetailActivity.this, MovieConfig.GOOGLE_API_KEY, mVedioId);
+                                startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mVedioId));
+                                startActivity(intent);
+                            }
                         }
                     });
                 } else {
                     mNoTrailerMessage.setText(R.string.noTrailer);
                 }
 
-
-
-
-
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                mNoTrailerMessage.setText(R.string.noTrailer);
             }
 
         });
@@ -239,6 +225,10 @@ public class DetailActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
         }
 
         return super.onOptionsItemSelected(item);

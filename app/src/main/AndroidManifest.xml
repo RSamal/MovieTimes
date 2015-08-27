@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.udacity.movietimes">
 
+    <!--User security permisson to access internet-->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,6 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
+        <!-- Main Activity to display list of movies-->
         <activity
             android:name=".views.MainActivity"
             android:label="@string/title_activity_main">
@@ -20,15 +22,15 @@
             </intent-filter>
         </activity>
 
+        <!--Sub Activity to display the details about the movie-->
         <activity
             android:name=".views.DetailActivity"
             android:label="@string/title_activity_detail">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udacity.movietimes.views.MainActivity" />
         </activity>
 
-        <activity
-            android:name="com.google.android.youtube.api.StandalonePlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
     </application>
 
 </manifest>
