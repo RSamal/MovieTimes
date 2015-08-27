@@ -1,6 +1,7 @@
 package com.udacity.movietimes.fragments;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.model.Movies;
 import com.udacity.movietimes.utils.MovieConfig;
 import com.udacity.movietimes.utils.MovieUrl;
+import com.udacity.movietimes.views.DetailActivity;
 import com.udacity.movietimes.webservices.ConnectionManager;
 
 /**
@@ -38,6 +40,7 @@ import com.udacity.movietimes.webservices.ConnectionManager;
 public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapter.MovieItemClickListner {
 
     private static final String TAG = HighestRateMovie.class.getSimpleName();
+    private static final String MOVIE_MESSG = "com.udacity.movietimes.MESSAGE";
 
     private RequestQueue mRequestQueue;
     private RecyclerView mRecyclerView;
@@ -136,7 +139,12 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
 
     @Override
     public void onItemClicked(Movie movie) {
-        //TODO : Start a detail acitivity
+
+        Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putParcelable(MOVIE_MESSG, movie);
+        mIntent.putExtras(mBundle);
+        startActivity(mIntent);
 
 
     }

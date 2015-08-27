@@ -139,8 +139,6 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
     @Override
     public void onItemClicked(Movie movie) {
 
-        //TODO Start the detail activity
-
         Intent mIntent = new Intent(getActivity(), DetailActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putParcelable(MOVIE_MESSG, movie);

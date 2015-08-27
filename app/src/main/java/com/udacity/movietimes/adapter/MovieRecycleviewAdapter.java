@@ -74,7 +74,7 @@ public class MovieRecycleviewAdapter extends RecyclerView.Adapter<MovieRecyclevi
         /**
          * Set the Rating of the Movie
          */
-        holder.rating.setRating(Float.valueOf(mMovieList.get(position).getmVoteAvg()) / 2);
+        holder.rating.setRating((float) (Float.valueOf(mMovieList.get(position).getmVoteAvg()) / 2.0));
 
         /**
          * Setting the Palete color of card view

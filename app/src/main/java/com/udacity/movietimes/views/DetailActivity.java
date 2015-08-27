@@ -33,6 +33,7 @@ import com.udacity.movietimes.utils.MovieTrailer;
 import com.udacity.movietimes.utils.MovieUrl;
 import com.udacity.movietimes.webservices.ConnectionManager;
 
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,11 +55,13 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mReleaseDate;
     private RatingBar mRatingBar;
     private TextView mOverview;
+    private TextView mNoTrailerMessage;
     private RelativeLayout mVedio;
     private ImageView mVedioImage;
 
     private RequestQueue mRequestQueue;
     private Trailer mTrailer;
+    private String  mVedioId;
 
 
     @Override
@@ -72,7 +75,7 @@ public class DetailActivity extends AppCompatActivity {
         mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle("");
         mToolBar.setBackgroundColor(Color.TRANSPARENT);
-        //mToolBar.setBackgroundColor(Color.TRANSPARENT);
+        mToolBar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(mToolBar);
 
         /**
@@ -96,36 +99,23 @@ public class DetailActivity extends AppCompatActivity {
         mOverview = (TextView) findViewById(R.id.detail_activity_overview);
         mVedio = (RelativeLayout) findViewById(R.id.detail_activity_vedio);
         mVedioImage = (ImageView) findViewById(R.id.detail_activity_vedio_img);
+        mNoTrailerMessage = (TextView) findViewById(R.id.detail_activity_msg_tv);
 
 
         /**
          * Set the Vedio Trailer of the movie from youtube
          */
-        final String mMovieTrailerId = getMovieTrailerId(mMovie.getmId());
 
-        Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_BASE_URL).buildUpon()
-                .appendPath(mMovieTrailerId)
-                .appendPath(MovieUrl.VEDIO_TN_SIZE);
-        Picasso.with(this).load(mTrailerUrl.toString()).into(mVedioImage);
-
-        mVedio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(DetailActivity.this, MovieConfig.GOOGLE_API_KEY, mMovieTrailerId);
-                startActivity(intent);
-            }
-        });
+        setMovieTrailer(mMovie.getmId());
 
 
         /**
-         *  Set the Poster of the Movie
+         * Set the poster of the movie using Picasso
          */
-
         // Get the IMAGE url
         StringBuilder imagePath = new StringBuilder(MovieUrl.MOVIE_IMAGE_BASE_URL)
                 .append(mMovie.getmPosterPath());
 
-        // Set the Image url using Picasso
         Picasso.with(this).load(imagePath.toString()).into(mPoster);
 
         /**
@@ -151,7 +141,7 @@ public class DetailActivity extends AppCompatActivity {
         /**
          * Set the Rating of the Movie
          */
-        mRatingBar.setRating(Float.valueOf(mMovie.getmVoteAvg()) / 2);
+        mRatingBar.setRating((float) (Float.valueOf(mMovie.getmVoteAvg()) / 2.0));
 
         /**
          * Setting up the overview
@@ -163,23 +153,61 @@ public class DetailActivity extends AppCompatActivity {
 
     /**
      * This function will return the movie trailer Id fetched from MovieDb Api
+     *
      * @param movieId
      * @return
      */
-    public String getMovieTrailerId(String movieId) {
+    public void setMovieTrailer(final String movieId) {
 
-        Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_ID_URL).buildUpon()
+
+        /**
+         * To get the Movie Trailer Id from Movie Db
+         */
+        final Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_ID_URL).buildUpon()
                 .appendPath(movieId)
                 .appendPath(MovieUrl.VIDEOS)
                 .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
-        Log.d(TAG,mTrailerUrl.toString());
+
+        Log.d("TEST", mTrailerUrl.toString());
 
         mRequestQueue = ConnectionManager.getRequestQueue(getApplicationContext());
+
         StringRequest request = new StringRequest(Request.Method.GET, mTrailerUrl.toString(), new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 mTrailer = new Gson().fromJson(response, Trailer.class);
+
+                /**
+                 * To get the Thumbnail from Youtube and set it on Image throug Picasso
+                 */
+
+
+                if (mTrailer.getmVedios().size() != 0) {
+                    mVedioId = mTrailer.getmVedios().get(0).getmKey();
+
+                    Uri.Builder mVedioUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_BASE_URL).buildUpon()
+                            .appendPath(mVedioId)
+                            .appendPath(MovieUrl.VEDIO_TN_SIZE);
+
+                    Picasso.with(getApplicationContext()).load(mVedioUrl.toString()).into(mVedioImage);
+
+                    mVedio.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = YouTubeStandalonePlayer.createVideoIntent(DetailActivity.this, MovieConfig.GOOGLE_API_KEY, mVedioId);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    mNoTrailerMessage.setText(R.string.noTrailer);
+                }
+
+
+
+
+
+
 
             }
         }, new Response.ErrorListener() {
@@ -192,9 +220,6 @@ public class DetailActivity extends AppCompatActivity {
 
         mRequestQueue.add(request);
 
-
-        // Always return the first Trailer Id
-        return null;
     }
 
     @Override
