@@ -1,23 +1,37 @@
 package com.udacity.movietimes.views;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailView;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.model.Movie;
+import com.udacity.movietimes.model.Trailer;
 import com.udacity.movietimes.utils.MovieConfig;
+import com.udacity.movietimes.utils.MovieTrailer;
 import com.udacity.movietimes.utils.MovieUrl;
+import com.udacity.movietimes.webservices.ConnectionManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,11 +50,15 @@ public class DetailActivity extends AppCompatActivity {
     private Toolbar mToolBar;
     private Movie mMovie;
     private ImageView mPoster;
-    private TextView  mTitle;
+    private TextView mTitle;
     private TextView mReleaseDate;
     private RatingBar mRatingBar;
     private TextView mOverview;
-  
+    private RelativeLayout mVedio;
+    private ImageView mVedioImage;
+
+    private RequestQueue mRequestQueue;
+    private Trailer mTrailer;
 
 
     @Override
@@ -76,6 +94,27 @@ public class DetailActivity extends AppCompatActivity {
         mReleaseDate = (TextView) findViewById(R.id.detail_activity_release_date);
         mRatingBar = (RatingBar) findViewById(R.id.detail_activity_rating);
         mOverview = (TextView) findViewById(R.id.detail_activity_overview);
+        mVedio = (RelativeLayout) findViewById(R.id.detail_activity_vedio);
+        mVedioImage = (ImageView) findViewById(R.id.detail_activity_vedio_img);
+
+
+        /**
+         * Set the Vedio Trailer of the movie from youtube
+         */
+        final String mMovieTrailerId = getMovieTrailerId(mMovie.getmId());
+
+        Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_BASE_URL).buildUpon()
+                .appendPath(mMovieTrailerId)
+                .appendPath(MovieUrl.VEDIO_TN_SIZE);
+        Picasso.with(this).load(mTrailerUrl.toString()).into(mVedioImage);
+
+        mVedio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent(DetailActivity.this, MovieConfig.GOOGLE_API_KEY, mMovieTrailerId);
+                startActivity(intent);
+            }
+        });
 
 
         /**
@@ -118,6 +157,44 @@ public class DetailActivity extends AppCompatActivity {
          * Setting up the overview
          */
         mOverview.setText(mMovie.getmOverview());
+
+
+    }
+
+    /**
+     * This function will return the movie trailer Id fetched from MovieDb Api
+     * @param movieId
+     * @return
+     */
+    public String getMovieTrailerId(String movieId) {
+
+        Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_ID_URL).buildUpon()
+                .appendPath(movieId)
+                .appendPath(MovieUrl.VIDEOS)
+                .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
+        Log.d(TAG,mTrailerUrl.toString());
+
+        mRequestQueue = ConnectionManager.getRequestQueue(getApplicationContext());
+        StringRequest request = new StringRequest(Request.Method.GET, mTrailerUrl.toString(), new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                mTrailer = new Gson().fromJson(response, Trailer.class);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+
+        });
+
+        mRequestQueue.add(request);
+
+
+        // Always return the first Trailer Id
+        return null;
     }
 
     @Override

@@ -10,17 +10,32 @@
         layout="@layout/tool_bar" />
 
     <!-- Include the youtube fragment for the youtube vedio thumbnail -->
-    <fragment
-        android:name="com.udacity.movietimes.fragments.YoutubeFragment"
-        android:id="@+id/youtube_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
+    <RelativeLayout
+        android:id="@+id/detail_activity_vedio"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp">
+
+        <!-- ImageView or your youtubeThumnailView -->
+        <ImageView
+            android:id="@+id/detail_activity_vedio_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- ImageView of your button -->
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/play" />
+
+    </RelativeLayout>
+
 
     <!-- Include the Movie content details -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/youtube_fragment"
+        android:layout_below="@id/detail_activity_vedio"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">

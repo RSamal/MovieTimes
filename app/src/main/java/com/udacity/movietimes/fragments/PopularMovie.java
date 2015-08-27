@@ -31,8 +31,8 @@ import com.udacity.movietimes.views.DetailActivity;
 import com.udacity.movietimes.webservices.ConnectionManager;
 
 /**
- * This fragment Class will show the details of popular movie for the user Tab selection. Upon selecting the tab
- * Popular , user will view the details fetched from network or database
+ * This fragment is a part of ViewPager and responsible to load the Popular Movie from MovieDb.
+ * It contents are loaded dynamically through network call, which uses Google Volley Api for it.
  */
 
 public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.MovieItemClickListner {
@@ -143,7 +143,7 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
 
         Intent mIntent = new Intent(getActivity(), DetailActivity.class);
         Bundle mBundle = new Bundle();
-        mBundle.putParcelable(MOVIE_MESSG,movie);
+        mBundle.putParcelable(MOVIE_MESSG, movie);
         mIntent.putExtras(mBundle);
         startActivity(mIntent);
 

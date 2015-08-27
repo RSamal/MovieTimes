@@ -29,7 +29,11 @@ import com.udacity.movietimes.utils.MovieUrl;
 import com.udacity.movietimes.webservices.ConnectionManager;
 
 /**
+ * This fragment is a part of ViewPager and responsible to load the HighRated Movie from MovieDb.
+ * It contents are loaded dynamically through network call, which uses Google Volley Api for it.
+ *
  * A simple {@link Fragment} subclass.
+ *
  */
 public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapter.MovieItemClickListner {
 

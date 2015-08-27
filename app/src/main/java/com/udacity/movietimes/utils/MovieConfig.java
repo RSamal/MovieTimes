@@ -19,6 +19,6 @@ public abstract class MovieConfig {
     /**
      * Google Developer API Key. Please replace with yours
      */
-    public static final String GOOGLE_API_KEY ="AIzaSyCktWZ6ydvQ12k89s2rYa-KN45XD_mwOB4";
+    public static final String GOOGLE_API_KEY ="AIzaSyDYA5kvFYOnznjuTxsC8btURc4Y90IQ_iE";
 
 }

@@ -26,8 +26,10 @@ public abstract class MovieUrl {
     /**
      * To Fetch the Vedio trailer of Movie
      */
-    public static final String MOVIE_VEDIO_BASE_URL = "http://api.themoviedb.org/3/movie/";
-    public static final String VEDIO_PATH = "vedios";
+    public static final String MOVIE_VEDIO_ID_URL = "http://api.themoviedb.org/3/movie/";
+    public static final String MOVIE_VEDIO_BASE_URL = "http://img.youtube.com/vi/";
+    public static final String VIDEOS = "videos";
+    public static final String VEDIO_TN_SIZE = "0.jpg";
 
 
 }
