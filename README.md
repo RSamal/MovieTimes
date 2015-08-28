@@ -26,5 +26,6 @@ To run this app through android studio , we need to chhange the MovieDb API key 
 
 ### Stage 1 Rubric changes
 * Movies are displayed in the main layout via a grid of their corresponding movie poster thumbnails :                           **I have used RecyclerView and CardView to display the details as that is latest.**
-* UI contains an element (i.e a spinner or settings menu) to toggle the sort order of the movies by: most popular, highest rated : ** I am aware of the concept SharedPreference and how to use it through Settings menu. However I would like to use the more advance TabLayout and VageViewer. Hence used them instead of changing the choice through Settings.
+* UI contains an element (i.e a spinner or settings menu) to toggle the sort order of the movies by: most popular, highest rated : 
+**I am aware of the concept SharedPreference and how to use it through Settings menu. However I would like to use the more advance TabLayout and VageViewer. Hence used them instead of changing the choice through Settings.**
 
