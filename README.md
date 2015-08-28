@@ -15,10 +15,6 @@ Once user select a specific movie from the list, A detail view will be shown whi
 To run this app through android studio , we need to chhange the MovieDb API key and Google Developer API key in the below class
 **`com.udacity.movietimes.utils.MovieConfig`**
 
-### App pics
-
-![Popular](https://drive.google.com/open?id=0B8DRFRadWBraemc3TkFSQm90YzA "Pop")
-
 ### External Jars/API
 * Google Volley - To do network call
 * Google GSON   - To parse JSON data
