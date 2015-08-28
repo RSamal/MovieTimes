@@ -9,8 +9,12 @@ Once user select a specific movie from the list, A detail view will be shown whi
 * Movie Titile
 * Movie release date
 * Movie user rating in stars
-* Moview Description
+* Movie Description
 
 ### Developer API key
 To run this app through android studio , we need to chhange the MovieDb API key and Google Developer API key in the below class
 **`com.udacity.movietimes.utils.MovieConfig`**
+
+### App pics
+
+![Popular](https://drive.google.com/open?id=0B8DRFRadWBraemc3TkFSQm90YzA "Pop")
