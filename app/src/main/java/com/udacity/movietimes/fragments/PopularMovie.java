@@ -17,12 +17,13 @@ package com.udacity.movietimes.fragments;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +41,12 @@ import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.model.Movies;
 import com.udacity.movietimes.utils.MovieConfig;
 import com.udacity.movietimes.utils.MovieUrl;
+import com.udacity.movietimes.utils.SpacesItemDecoration;
 import com.udacity.movietimes.views.DetailActivity;
 import com.udacity.movietimes.webservices.ConnectionManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This fragment is a part of ViewPager and responsible to load the Popular Movie from MovieDb.
@@ -53,17 +58,29 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
 
     private static final String TAG = PopularMovie.class.getSimpleName();
     private static final String MOVIE_MESSG = "com.udacity.movietimes.MESSAGE";
+    private static final String MOVIE_KEY = "popular";
 
     private RequestQueue mRequestQueue;
     private RecyclerView mRecyclerView;
     private MovieRecycleviewAdapter mMovieRecycleviewAdapter;
-    private CardView mCardView;
+    private List<Movie> movieList;
 
 
     public PopularMovie() {
         // Required empty public constructor
     }
 
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList = movieList;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (movieList != null) {
+            outState.putParcelableArrayList(MOVIE_KEY, (ArrayList<? extends Parcelable>) movieList);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,12 +95,28 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_popular_movie_rv);
         mRecyclerView.setHasFixedSize(true);
 
-        // Set the LinearLayout Manager and DefaultAnimator
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        // Set the GridLayout Manager and DefaultAnimator
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 2));
+        } else {
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 4));
+        }
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(50));
 
-        /** Fetch the popular movie from MovieDB and update it on UI */
-        getPopularMovies();
+        /**Check if the network call is already done and the data has been saved earlier*/
+        if (savedInstanceState == null) {
+
+            /** Fetch the popular movie from MovieDB and update it on UI */
+            getPopularMovies();
+
+        } else {
+
+            movieList = (List<Movie>) savedInstanceState.get(MOVIE_KEY);
+            //Set the view adapter
+            mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movieList);
+            mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
+        }
 
         return view;
 
@@ -118,6 +151,10 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
                 //Set the view adapter
                 mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movies.getMovieList());
                 mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
+
+                // Store the list of movies in the outer class variable , which will be use in onSaveInstanceState
+                setMovieList(movies.getMovieList());
+
 
                 //TODO : Put the Movie list into a Database
 

@@ -37,30 +37,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-        /**
-         * Setup Toolbar as an AppBar
-         */
+        /** Setup Toolbar as an AppBar */
         mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.app_name);
         setSupportActionBar(mToolBar);
 
-        /**
-         * Setup the ViewPager
-         */
+        /** Setup the ViewPager*/
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(new MovieSelectAdapter(getSupportFragmentManager()));
 
-        /**
-         * Setup the Sliding Tab
-         */
+        /** Setup the Sliding Tab*/
         mTabLayout = (TabLayout) findViewById(R.id.sliding_tab);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        /**
-         *  Implement Tab Listner for page selection
-         */
+        /** Implement Tab Listner for page selection */
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

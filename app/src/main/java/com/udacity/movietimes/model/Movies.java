@@ -15,21 +15,50 @@
  */
 package com.udacity.movietimes.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 /**
  * Created by ramakantasamal on 8/17/15.
- *
+ * <p/>
  * This class will contain the objects for list of movies and will be used to parse JSON data using GSON library.
+ * This class also implement Parcelable interface to be used in savedInstanceState for the app.
  */
-public class Movies {
+public class Movies implements Parcelable {
 
+    public static final Creator<Movies> CREATOR = new Creator<Movies>() {
+        @Override
+        public Movies createFromParcel(Parcel in) {
+            return new Movies(in);
+        }
+
+        @Override
+        public Movies[] newArray(int size) {
+            return new Movies[size];
+        }
+    };
     @SerializedName("results")
     private List<Movie> movieList;
 
+    public Movies(Parcel in) {
+        movieList = in.createTypedArrayList(Movie.CREATOR);
+    }
+
     public List<Movie> getMovieList() {
         return movieList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(movieList);
     }
 }
