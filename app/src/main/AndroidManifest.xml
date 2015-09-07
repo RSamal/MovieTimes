@@ -13,7 +13,7 @@
 
         <!-- Main Activity to display list of movies-->
         <activity
-            android:name=".views.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +24,11 @@
 
         <!--Sub Activity to display the details about the movie-->
         <activity
-            android:name=".views.DetailActivity"
+            android:name=".activities.DetailActivity"
             android:label="@string/title_activity_detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.udacity.movietimes.views.MainActivity" />
+                android:value="com.udacity.movietimes.activities.MainActivity" />
         </activity>
 
     </application>

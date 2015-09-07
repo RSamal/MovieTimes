@@ -42,7 +42,7 @@ import com.udacity.movietimes.model.Movies;
 import com.udacity.movietimes.utils.MovieConfig;
 import com.udacity.movietimes.utils.MovieUrl;
 import com.udacity.movietimes.utils.SpacesItemDecoration;
-import com.udacity.movietimes.views.DetailActivity;
+import com.udacity.movietimes.activities.DetailActivity;
 import com.udacity.movietimes.webservices.ConnectionManager;
 
 import java.util.ArrayList;
