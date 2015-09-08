@@ -16,8 +16,11 @@
 package com.udacity.movietimes.fragments;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -37,6 +40,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieRecycleviewAdapter;
+import com.udacity.movietimes.database.MovieContract;
+import com.udacity.movietimes.database.MovieDbUtil;
 import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.model.Movies;
 import com.udacity.movietimes.utils.MovieConfig;
@@ -47,6 +52,7 @@ import com.udacity.movietimes.webservices.ConnectionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * This fragment is a part of ViewPager and responsible to load the HighRated Movie from MovieDb.
@@ -159,6 +165,7 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
                 setMovieList(movies.getMovieList());
 
                 //TODO : Put the Movie list into a Database
+                MovieDbUtil.loadMovieDatabase(movies.getMovieList(), MovieContract.MovieEntry.HIGH_RATE_MOVIE, getActivity().getApplicationContext());
 
             }
         }, new Response.ErrorListener() {
@@ -166,6 +173,24 @@ public class HighestRateMovie extends Fragment implements MovieRecycleviewAdapte
             @Override
             public void onErrorResponse(VolleyError error) {
                 // TODO : Get the list from Database
+                Cursor cursor = getActivity().getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null);
+
+                Vector<ContentValues> values = new Vector<ContentValues>(cursor.getCount());
+                if (cursor.moveToFirst()) {
+                    do {
+                        ContentValues value = new ContentValues();
+                        DatabaseUtils.cursorRowToContentValues(cursor, value);
+                        values.add(value);
+                    } while (cursor.moveToNext());
+                }
+
+                List<Movie> movies = MovieDbUtil.convertContentValuesToMovie(values);
+                //Set the view adapter
+                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), HighestRateMovie.this, movies);
+                mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
+
+                // Store the list of movies in the outer class variable , which will be use in onSaveInstanceState
+                setMovieList(movies);
             }
 
         });

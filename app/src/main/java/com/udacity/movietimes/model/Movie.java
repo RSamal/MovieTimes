@@ -51,6 +51,8 @@ public class Movie implements Parcelable {
     @SerializedName("overview")
     private String mOverview;
 
+    public Movie(){}
+
     /**
      * Parcelble implementation to use in Intent
      */
@@ -85,6 +87,30 @@ public class Movie implements Parcelable {
 
     public String getmOverview() {
         return mOverview;
+    }
+
+    public void setmId(String mId) {
+        this.mId = mId;
+    }
+
+    public void setmTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
+
+    public void setmReleaseDate(String mReleaseDate) {
+        this.mReleaseDate = mReleaseDate;
+    }
+
+    public void setmPosterPath(String mPosterPath) {
+        this.mPosterPath = mPosterPath;
+    }
+
+    public void setmVoteAvg(String mVoteAvg) {
+        this.mVoteAvg = mVoteAvg;
+    }
+
+    public void setmOverview(String mOverview) {
+        this.mOverview = mOverview;
     }
 
     @Override
