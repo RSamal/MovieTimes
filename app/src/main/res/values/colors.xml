@@ -14,5 +14,6 @@
     <!-- TabLayout Color Setting -->
     <color name="tabIndicatorColor">#FFFFFF</color>
 
+    <color name="ratingStar">#9f9f9f</color>
 
 </resources>

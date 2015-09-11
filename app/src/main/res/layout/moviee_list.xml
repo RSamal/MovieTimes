@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    android:layout_width="150dp"
+    android:layout_width="match_parent"
     android:layout_height="200dp"
     card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="0.01dp">
+    card_view:cardElevation="1dp"
+    android:background="?attr/selectableItemBackgroundBorderless">
 
     <LinearLayout
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="vertical">
 
@@ -26,7 +28,9 @@
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
             android:singleLine="true"
-            android:textColor="@color/textColor" />
+            android:textColor="@color/textColor"
+            android:textAppearance="@android:style/TextAppearance.Material.Body2"
+            android:fontFamily="sans-serif-medium"/>
 
         <RatingBar
             android:id="@+id/movie_list_rating"

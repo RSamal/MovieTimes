@@ -19,19 +19,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.udacity.movietimes.fragments.FavoriteMovie;
 import com.udacity.movietimes.fragments.HighestRateMovie;
 import com.udacity.movietimes.fragments.PopularMovie;
 
 /**
  * Created by ramakantasamal on 8/17/15.
- *
+ * <p>
  * This is an adapter program to support the pager view.This program will return
  * the selected fragments based up on user select the tabs for Highest rated or popular,
  */
 public class MovieSelectAdapter extends FragmentPagerAdapter {
 
-    private static final int TAB_COUNT = 2;
-    private String[] mTabTitle = {"HIGH RATE","POPULAR"};
+    private static final int TAB_COUNT = 3;
+    private String[] mTabTitle = {"HIGH RATE", "POPULAR", "FAVORITE"};
 
     public MovieSelectAdapter(FragmentManager fm) {
         super(fm);
@@ -39,11 +40,14 @@ public class MovieSelectAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if(position == 0){
-            return new HighestRateMovie();
-        }
-        else{
-            return new PopularMovie();
+
+        switch (position) {
+            case 1:
+                return new PopularMovie();
+            case 2:
+                return new FavoriteMovie();
+            default:
+                return new HighestRateMovie();
         }
     }
 

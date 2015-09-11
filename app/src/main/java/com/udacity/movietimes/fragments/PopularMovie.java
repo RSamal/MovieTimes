@@ -121,8 +121,8 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
         return new CursorLoader(getActivity(),
                 MovieContract.MovieEntry.CONTENT_URI,
                 MovieUtility.MOVIE_COLUMNS,
-                null,
-                null,
+                MovieContract.MovieEntry.COLUMN_POPULAR + " = ?",
+                selectionArgs,
                 null
         );
 
@@ -130,7 +130,6 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.d("LOOOO",Integer.toString(cursor.getCount()));
         mMovieListAdapter.swapCursor(cursor);
     }
 

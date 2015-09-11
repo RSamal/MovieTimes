@@ -35,6 +35,7 @@ public class FetchMovieDetails {
     public void callMovieDbRest() {
 
         String sortOrder = MovieUtility.getPreferedSortOrder(mContext);
+        Log.d("RINKU",sortOrder);
 
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(MovieUrl.BASE_URL).build();
         final MovieApiEndPoint apiService = restAdapter.create(MovieApiEndPoint.class);

@@ -16,7 +16,11 @@
 package com.udacity.movietimes.adapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -82,10 +86,16 @@ public class MovieListAdapter extends CursorAdapter {
         holder.title.setText(cursor.getString(MovieUtility.COL_TITLE));
 
         /** Set the Rating of the Movie */
+        int backGround = new ColorGenerator(context).getBackgroundColor();
         holder.rating.setRating((float) (Float.valueOf(cursor.getString(MovieUtility.COL_RATING)) / 2.0));
+        LayerDrawable stars = (LayerDrawable) holder.rating.getProgressDrawable();
+        stars.getDrawable(0).setColorFilter(backGround,PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(backGround,PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
 
         /**Setting the Pallete color of card view . As the Pallete color does not work , hence using dynamic color generation routine*/
-        holder.cardView.setCardBackgroundColor(new ColorGenerator(context).getBackgroundColor());
+        holder.cardView.setCardBackgroundColor(backGround);
 
     }
 

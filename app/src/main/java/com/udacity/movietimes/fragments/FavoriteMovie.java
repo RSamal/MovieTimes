@@ -46,18 +46,18 @@ import java.util.List;
  * It contents are loaded dynamically through network call, which uses Google Volley Api for it.
  */
 
-public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
-    private static final String TAG = HighestRateMovie.class.getSimpleName();
-    private static final int HIGH_RATE_MOVIE_LOADER = 0;
+    private static final String TAG = FavoriteMovie.class.getSimpleName();
+    private static final int FAV_MOVIE_LOADER = 0;
 
     private GridView mGridView;
     private MovieListAdapter mMovieListAdapter;
     private List<Movie> movieList;
 
 
-    public HighestRateMovie() {
+    public FavoriteMovie() {
         // Required empty public constructor
     }
 
@@ -97,7 +97,7 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         preferences.edit().putString(
                 getActivity().getString(R.string.api_sort_key),
-                getActivity().getString(R.string.api_sort_votes)
+                getActivity().getString(R.string.api_sort_popularity)
         );
 
         // Fetch the Movie Details
@@ -108,7 +108,7 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(HIGH_RATE_MOVIE_LOADER, null, this);
+        getLoaderManager().initLoader(FAV_MOVIE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -121,8 +121,8 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
         return new CursorLoader(getActivity(),
                 MovieContract.MovieEntry.CONTENT_URI,
                 MovieUtility.MOVIE_COLUMNS,
-                MovieContract.MovieEntry.COLUMN_HIGH_RATE + " = ?",
-                selectionArgs,
+                null,
+                null,
                 null
         );
 

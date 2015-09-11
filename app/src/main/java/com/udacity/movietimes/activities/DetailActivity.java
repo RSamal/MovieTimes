@@ -85,7 +85,6 @@ public class DetailActivity extends AppCompatActivity {
         mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle("");
         mToolBar.setBackgroundColor(Color.TRANSPARENT);
-        mToolBar.setBackgroundColor(Color.TRANSPARENT);
         setSupportActionBar(mToolBar);
 
         getSupportActionBar().setHomeButtonEnabled(true);

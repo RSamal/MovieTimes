@@ -2,7 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:padding="3dp"
     tools:mContext="com.udacity.movietimes.fragments.PopularMovie">
+
 
     <!-- A RecyclerView with some commonly used attributes -->
     <GridView
@@ -12,6 +15,9 @@
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:columnWidth="130dp"
+        android:horizontalSpacing="3dp"
+        android:verticalSpacing="3dp"
+        android:layout_marginTop="5dp"
         />
 
 </FrameLayout>
