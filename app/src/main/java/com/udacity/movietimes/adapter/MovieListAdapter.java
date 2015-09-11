@@ -16,11 +16,13 @@
 package com.udacity.movietimes.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import com.udacity.movietimes.R;
 import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.utils.ColorGenerator;
 import com.udacity.movietimes.utils.MovieUrl;
+import com.udacity.movietimes.utils.MovieUtility;
 
 import java.util.List;
 
@@ -39,75 +42,53 @@ import java.util.List;
  * This is a RecyclerViewAdapter class which will be responsible for creating movie list at runtime. It gets the data comes back from MovieDB API
  * and uses recyclerview and cardview to list the popular and highest rated movie.
  */
-public class MovieRecycleviewAdapter extends RecyclerView.Adapter<MovieRecycleviewAdapter.MovieViewHolder> {
+public class MovieListAdapter extends CursorAdapter {
 
     //Log TAG for this class
-    private static final String TAG = MovieRecycleviewAdapter.class.getSimpleName();
-    protected MovieItemClickListner mListner;
-    private List<Movie> mMovieList;
-    private Context mContext;
+    private static final String TAG = MovieListAdapter.class.getSimpleName();
 
-    public MovieRecycleviewAdapter(Context context, MovieItemClickListner listner, List<Movie> movieList) {
+    public MovieListAdapter(Context context, Cursor cursor, int flags) {
+        super(context, cursor, flags);
+    }
 
-        mMovieList = movieList;
-        mContext = context;
-        mListner = listner;
+
+
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+
+
+        View view = LayoutInflater.from(context).inflate(R.layout.moviee_list, parent, false);
+
+        MovieViewHolder viewHolder = new MovieViewHolder(view);
+        view.setTag(viewHolder);
+
+        return view;
     }
 
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public void bindView(View view, Context context, Cursor cursor) {
 
-        //inflate the movie row of recycler view
-        View view = LayoutInflater.from(mContext).inflate(R.layout.moviee_row, parent, false);
+        MovieViewHolder holder = (MovieViewHolder) view.getTag();
 
-        //instantiate the view holder object
-        MovieViewHolder movieViewHolder = new MovieViewHolder(view);
-
-
-        return movieViewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(final MovieViewHolder holder, int position) {
-
-        /** Set the Poster of the Movie */
+        // Set the Poster of the Movie
         // Get the IMAGE url
         StringBuilder imagePath = new StringBuilder(MovieUrl.MOVIE_IMAGE_BASE_URL)
-                .append(mMovieList.get(position).getmPosterPath());
+                .append(cursor.getString(MovieUtility.COL_POSTER_PATH));
 
-        // Set the Image url using Volley
-        holder.poster.buildDrawingCache();
-        Picasso.with(mContext).load(imagePath.toString()).into(holder.poster);
+        /**Set the Image url using Picasso */
+        Picasso.with(context).load(imagePath.toString()).into(holder.poster);
 
         /** Set the title of the Movie */
-        holder.title.setText(mMovieList.get(position).getmTitle());
+        holder.title.setText(cursor.getString(MovieUtility.COL_TITLE));
 
         /** Set the Rating of the Movie */
-        holder.rating.setRating((float) (Float.valueOf(mMovieList.get(position).getmVoteAvg()) / 2.0));
+        holder.rating.setRating((float) (Float.valueOf(cursor.getString(MovieUtility.COL_RATING)) / 2.0));
 
         /**Setting the Pallete color of card view . As the Pallete color does not work , hence using dynamic color generation routine*/
-        holder.cardView.setCardBackgroundColor(new ColorGenerator(mContext).getBackgroundColor());
+        holder.cardView.setCardBackgroundColor(new ColorGenerator(context).getBackgroundColor());
 
     }
 
-    /**
-     * To calculate total movies and returning its size
-     *
-     * @return Returns the size of Movie list
-     */
-    @Override
-    public int getItemCount() {
-        return mMovieList.size();
-    }
-
-    /**
-     * This interface will be use to enable the CardView listener for movie items.
-     * This follows the Observer Design pattern
-     */
-    public interface MovieItemClickListner {
-        void onItemClicked(Movie movie);
-
-    }
 
     /**
      * ViewHolder for movie row items.
@@ -115,7 +96,7 @@ public class MovieRecycleviewAdapter extends RecyclerView.Adapter<MovieRecyclevi
      * This is an inner class of ViewHolder type which will be responsible to create the hold the view items at runtime. This also implements
      * View.OnClickListener interface which is help full to make the CardView clickable event.
      */
-    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MovieViewHolder {
 
         CardView cardView = null;
         ImageView poster = null;
@@ -123,19 +104,13 @@ public class MovieRecycleviewAdapter extends RecyclerView.Adapter<MovieRecyclevi
         RatingBar rating = null;
 
         public MovieViewHolder(View itemView) {
-            super(itemView);
 
             cardView = (CardView) itemView.findViewById(R.id.card_view);
-            poster = (ImageView) itemView.findViewById(R.id.movie_row_poster);
-            title = (TextView) itemView.findViewById(R.id.movie_row_title);
-            rating = (RatingBar) itemView.findViewById(R.id.movie_row_rating);
+            poster = (ImageView) itemView.findViewById(R.id.movie_list_poster);
+            title = (TextView) itemView.findViewById(R.id.movie_list_title);
+            rating = (RatingBar) itemView.findViewById(R.id.movie_list_rating);
 
-            itemView.setOnClickListener(this);
-        }
 
-        @Override
-        public void onClick(View v) {
-            mListner.onItemClicked(mMovieList.get(getPosition()));
         }
     }
 }

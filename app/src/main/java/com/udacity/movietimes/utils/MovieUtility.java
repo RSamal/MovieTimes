@@ -22,6 +22,26 @@ import java.util.prefs.PreferenceChangeEvent;
  */
 public class MovieUtility {
 
+    public static final String[] MOVIE_COLUMNS = {
+            MovieContract.MovieEntry._ID,
+            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+            MovieContract.MovieEntry.COLUMN_TITLE,
+            MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
+            MovieContract.MovieEntry.COLUMN_POSTER_PATH,
+            MovieContract.MovieEntry.COLUMN_RATING,
+            MovieContract.MovieEntry.COLUMN_OVERVIEW
+    };
+
+    // These indices are tied to MOVIE_COLUMNS.  If MOVIE_COLUMNS changes, these
+    // must change.
+    public static final int COL_ID = 0;
+    public static final int COL_MOVIE_ID = 1;
+    public static final int COL_TITLE = 2;
+    public static final int COL_RELEASE_DATE = 3;
+    public static final int COL_POSTER_PATH = 4;
+    public static final int COL_RATING = 5;
+    public static final int COL_OVERVIEW = 6;
+
 
     public static String getPreferedSortOrder(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

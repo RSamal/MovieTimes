@@ -16,34 +16,27 @@
 package com.udacity.movietimes.fragments;
 
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 import com.udacity.movietimes.R;
-import com.udacity.movietimes.adapter.MovieRecycleviewAdapter;
+import com.udacity.movietimes.adapter.MovieListAdapter;
+import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.model.Movie;
-import com.udacity.movietimes.model.Movies;
-import com.udacity.movietimes.utils.MovieConfig;
-import com.udacity.movietimes.utils.MovieUrl;
-import com.udacity.movietimes.utils.SpacesItemDecoration;
-import com.udacity.movietimes.activities.DetailActivity;
-import com.udacity.movietimes.webservices.ConnectionManager;
+import com.udacity.movietimes.utils.MovieUtility;
+import com.udacity.movietimes.webservices.FetchMovieDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,16 +46,14 @@ import java.util.List;
  * It contents are loaded dynamically through network call, which uses Google Volley Api for it.
  */
 
-public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.MovieItemClickListner {
+public class PopularMovie extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private static final String TAG = PopularMovie.class.getSimpleName();
-    private static final String MOVIE_MESSG = "com.udacity.movietimes.MESSAGE";
-    private static final String MOVIE_KEY = "popular";
+    private static final int MOVIE_LOADER = 0;
 
-    private RequestQueue mRequestQueue;
-    private RecyclerView mRecyclerView;
-    private MovieRecycleviewAdapter mMovieRecycleviewAdapter;
+    private GridView mGridView;
+    private MovieListAdapter mMovieListAdapter;
     private List<Movie> movieList;
 
 
@@ -78,7 +69,7 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (movieList != null) {
-            outState.putParcelableArrayList(MOVIE_KEY, (ArrayList<? extends Parcelable>) movieList);
+            outState.putParcelableArrayList("KEY", (ArrayList<? extends Parcelable>) movieList);
         }
     }
 
@@ -86,100 +77,65 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Instantiate the cursor Adapater
+        mMovieListAdapter = new MovieListAdapter(getActivity(), null, 0);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
-//
-//        /** Setup for the RecyclerView */
-//        //instantiate the recycler view
-//        mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_popular_movie_rv);
-//        mRecyclerView.setHasFixedSize(true);
-//
-//        // Set the GridLayout Manager and DefaultAnimator
-//        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-//            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 2));
-//        } else {
-//            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 4));
-//        }
-//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerView.addItemDecoration(new SpacesItemDecoration(50));
-//
-//        /**Check if the network call is already done and the data has been saved earlier*/
-//        if (savedInstanceState == null) {
-//
-//            /** Fetch the popular movie from MovieDB and update it on UI */
-//            getPopularMovies();
-//
-//        } else {
-//
-//            movieList = (List<Movie>) savedInstanceState.get(MOVIE_KEY);
-//            //Set the view adapter
-//            mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movieList);
-//            mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
-//        }
+        mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
+        mGridView.setAdapter(mMovieListAdapter);
 
         return view;
 
     }
 
-//    /**
-//     * This method will be use to get the popular movie details using MovieDb API from MovieDb.
-//     * It uses google Volley for the networking call
-//     *
-//     * @return null
-//     */
-//    public void getPopularMovies() {
-//
-//        /** Build the URL for the popular movie using Uri.Builder */
-//        final String popularity_desc = "popularity.desc";
-//
-//        final Uri.Builder movieUrl = Uri.parse(MovieUrl.BASE_URL).buildUpon()
-//                .appendQueryParameter(MovieUrl.SORT_BY_PARM, popularity_desc)
-//                .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
-//
-//
-//        /** Do the network call for request/response using Volley */
-//        Movies movies = null;
-//        mRequestQueue = ConnectionManager.getRequestQueue(getActivity().getApplicationContext());
-//
-//        StringRequest request = new StringRequest(Request.Method.GET, movieUrl.toString(), new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response) {
-//                Movies movies = new Gson().fromJson(response, Movies.class);
-//
-//                //Set the view adapter
-//                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movies.getMovieList());
-//                mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
-//
-//                // Store the list of movies in the outer class variable , which will be use in onSaveInstanceState
-//                setMovieList(movies.getMovieList());
-//
-//
-//                //TODO : Put the Movie list into a Database
-//
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                // TODO : Get the list from Database
-//            }
-//
-//        });
-//
-//        mRequestQueue.add(request);
-//
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences.edit().putString(
+                getActivity().getString(R.string.api_sort_key),
+                getActivity().getString(R.string.api_sort_popularity)
+        );
+
+        // Fetch the Movie Details
+
+        FetchMovieDetails details = new FetchMovieDetails(getActivity());
+        details.callMovieDbRest();
+    }
 
     @Override
-    public void onItemClicked(Movie movie) {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
 
-        Intent mIntent = new Intent(getActivity(), DetailActivity.class);
-        Bundle mBundle = new Bundle();
-        mBundle.putParcelable(MOVIE_MESSG, movie);
-        mIntent.putExtras(mBundle);
-        startActivity(mIntent);
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
+        String[] selectionArgs = {"Y"};
+
+        return new CursorLoader(getActivity(),
+                MovieContract.MovieEntry.CONTENT_URI,
+                MovieUtility.MOVIE_COLUMNS,
+                null,
+                null,
+                null
+        );
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d("LOOOO",Integer.toString(cursor.getCount()));
+        mMovieListAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mMovieListAdapter.swapCursor(null);
     }
 }

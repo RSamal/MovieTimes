@@ -5,11 +5,13 @@
     tools:mContext="com.udacity.movietimes.fragments.PopularMovie">
 
     <!-- A RecyclerView with some commonly used attributes -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_popular_movie_rv"
+    <GridView
+        android:id="@+id/movie_fragment_gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:scrollbars="vertical" />
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:columnWidth="130dp"
+        />
 
 </FrameLayout>
