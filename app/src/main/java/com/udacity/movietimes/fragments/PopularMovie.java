@@ -89,88 +89,88 @@ public class PopularMovie extends Fragment implements MovieRecycleviewAdapter.Mo
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
-
-        /** Setup for the RecyclerView */
-        //instantiate the recycler view
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_popular_movie_rv);
-        mRecyclerView.setHasFixedSize(true);
-
-        // Set the GridLayout Manager and DefaultAnimator
-        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 2));
-        } else {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 4));
-        }
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(50));
-
-        /**Check if the network call is already done and the data has been saved earlier*/
-        if (savedInstanceState == null) {
-
-            /** Fetch the popular movie from MovieDB and update it on UI */
-            getPopularMovies();
-
-        } else {
-
-            movieList = (List<Movie>) savedInstanceState.get(MOVIE_KEY);
-            //Set the view adapter
-            mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movieList);
-            mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
-        }
+//
+//        /** Setup for the RecyclerView */
+//        //instantiate the recycler view
+//        mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_popular_movie_rv);
+//        mRecyclerView.setHasFixedSize(true);
+//
+//        // Set the GridLayout Manager and DefaultAnimator
+//        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 2));
+//        } else {
+//            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 4));
+//        }
+//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        mRecyclerView.addItemDecoration(new SpacesItemDecoration(50));
+//
+//        /**Check if the network call is already done and the data has been saved earlier*/
+//        if (savedInstanceState == null) {
+//
+//            /** Fetch the popular movie from MovieDB and update it on UI */
+//            getPopularMovies();
+//
+//        } else {
+//
+//            movieList = (List<Movie>) savedInstanceState.get(MOVIE_KEY);
+//            //Set the view adapter
+//            mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movieList);
+//            mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
+//        }
 
         return view;
 
     }
 
-    /**
-     * This method will be use to get the popular movie details using MovieDb API from MovieDb.
-     * It uses google Volley for the networking call
-     *
-     * @return null
-     */
-    public void getPopularMovies() {
-
-        /** Build the URL for the popular movie using Uri.Builder */
-        final String popularity_desc = "popularity.desc";
-
-        final Uri.Builder movieUrl = Uri.parse(MovieUrl.BASE_URL).buildUpon()
-                .appendQueryParameter(MovieUrl.SORT_BY_PARM, popularity_desc)
-                .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
-
-
-        /** Do the network call for request/response using Volley */
-        Movies movies = null;
-        mRequestQueue = ConnectionManager.getRequestQueue(getActivity().getApplicationContext());
-
-        StringRequest request = new StringRequest(Request.Method.GET, movieUrl.toString(), new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Movies movies = new Gson().fromJson(response, Movies.class);
-
-                //Set the view adapter
-                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movies.getMovieList());
-                mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
-
-                // Store the list of movies in the outer class variable , which will be use in onSaveInstanceState
-                setMovieList(movies.getMovieList());
-
-
-                //TODO : Put the Movie list into a Database
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO : Get the list from Database
-            }
-
-        });
-
-        mRequestQueue.add(request);
-
-    }
+//    /**
+//     * This method will be use to get the popular movie details using MovieDb API from MovieDb.
+//     * It uses google Volley for the networking call
+//     *
+//     * @return null
+//     */
+//    public void getPopularMovies() {
+//
+//        /** Build the URL for the popular movie using Uri.Builder */
+//        final String popularity_desc = "popularity.desc";
+//
+//        final Uri.Builder movieUrl = Uri.parse(MovieUrl.BASE_URL).buildUpon()
+//                .appendQueryParameter(MovieUrl.SORT_BY_PARM, popularity_desc)
+//                .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
+//
+//
+//        /** Do the network call for request/response using Volley */
+//        Movies movies = null;
+//        mRequestQueue = ConnectionManager.getRequestQueue(getActivity().getApplicationContext());
+//
+//        StringRequest request = new StringRequest(Request.Method.GET, movieUrl.toString(), new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//                Movies movies = new Gson().fromJson(response, Movies.class);
+//
+//                //Set the view adapter
+//                mMovieRecycleviewAdapter = new MovieRecycleviewAdapter(getActivity().getApplicationContext(), PopularMovie.this, movies.getMovieList());
+//                mRecyclerView.setAdapter(mMovieRecycleviewAdapter);
+//
+//                // Store the list of movies in the outer class variable , which will be use in onSaveInstanceState
+//                setMovieList(movies.getMovieList());
+//
+//
+//                //TODO : Put the Movie list into a Database
+//
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                // TODO : Get the list from Database
+//            }
+//
+//        });
+//
+//        mRequestQueue.add(request);
+//
+//    }
 
     @Override
     public void onItemClicked(Movie movie) {

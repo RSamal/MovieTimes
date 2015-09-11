@@ -18,6 +18,7 @@ package com.udacity.movietimes.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.udacity.movietimes.database.MovieContract.*;
 
 /**
  * This is Db Helper class which will be use to create and drop Movie Database and Table under the database
@@ -33,12 +34,16 @@ public class MovieDbHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(MovieContract.MovieEntry.CREATE_TABLE);
+        db.execSQL(MovieEntry.CREATE_TABLE);
+        db.execSQL(TrailerEntry.CREATE_TABLE);
+        db.execSQL(ReviewEntry.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(MovieContract.MovieEntry.DROP_TABLE);
+        db.execSQL(MovieEntry.DROP_TABLE);
+        db.execSQL(TrailerEntry.DROP_TABLE);
+        db.execSQL(ReviewEntry.DROP_TABLE);
         onCreate(db);
     }
 }

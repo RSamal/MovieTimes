@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.udacity.movietimes.database;
+package com.udacity.movietimes.Utils;
 
 /**
  * Created by ramakant on 9/6/2015.
@@ -29,6 +29,7 @@ import android.test.AndroidTestCase;
 
 
 import com.udacity.movietimes.Utils.PollingCheck;
+import com.udacity.movietimes.database.MovieContract;
 
 import java.util.Map;
 import java.util.Set;
@@ -36,18 +37,18 @@ import java.util.Set;
 public class TestUtilites extends AndroidTestCase {
 
 
+    static public final int BULK_INSERT_RECORDS_TO_INSERT = 10;
+
     /* Create a record for the Movie Database using ContentValues */
     static ContentValues createMovieRecord() {
         ContentValues testValues = new ContentValues();
+
         testValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, 1111);
         testValues.put(MovieContract.MovieEntry.COLUMN_TITLE, "Test Movie");
         testValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, "2015-15-20");
         testValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, "/path");
         testValues.put(MovieContract.MovieEntry.COLUMN_RATING, 7.8);
         testValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, "Sample description");
-        testValues.put(MovieContract.MovieEntry.COLUMN_TRAILER_ID, "TEST-ID");
-        // For user review I am using a JSON object
-        testValues.put(MovieContract.MovieEntry.COLUMN_USER_REVIEW, "{\"id\":76341,\"page\":1,\"results\":[{\"id\":\"55660928c3a3687ad7001db1\",\"author\":\"Phileas Fogg\",\"content\":\"Fabulous action movie. Lots of interesting characters. They don't make many movies like this. The whole movie from start to finish was entertaining I'm looking forward to seeing it again. I definitely recommend seeing it.\",\"url\":\"http://j.mp/1HLTNzT\"},{\"id\":\"55732a53925141456e000639\",\"author\":\"Andres Gomez\",\"content\":\"Good action movie with a decent script for the genre. The photography is really good too but, in the end, it is quite repeating itself from beginning to end and the stormy OST is exhausting.\",\"url\":\"http://j.mp/1dUnvpG\"}],\"total_pages\":1,\"total_results\":2}");
         testValues.put(MovieContract.MovieEntry.COLUMN_POPULAR, "Y");
         testValues.put(MovieContract.MovieEntry.COLUMN_HIGH_RATE, "Y");
         testValues.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "Y");
@@ -55,8 +56,86 @@ public class TestUtilites extends AndroidTestCase {
         return testValues;
     }
 
+
+    static ContentValues[] createBulkInsertMovieValues() {
+
+        ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
+
+        for (int i = 0; i < BULK_INSERT_RECORDS_TO_INSERT; i++) {
+            ContentValues values = new ContentValues();
+            values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, 1001 + i);
+            values.put(MovieContract.MovieEntry.COLUMN_TITLE, "Test" + i);
+            values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, "2015-05-15");
+            values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, "/path");
+            values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, "Overview");
+            values.put(MovieContract.MovieEntry.COLUMN_RATING, 7.8);
+            values.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "Y");
+            values.put(MovieContract.MovieEntry.COLUMN_POPULAR, "Y");
+            values.put(MovieContract.MovieEntry.COLUMN_HIGH_RATE, "Y");
+
+            returnContentValues[i] = values;
+        }
+        return returnContentValues;
+    }
+
+    /* Create a record for the Movie Database using ContentValues */
+    static ContentValues createTrailerRecord() {
+        ContentValues testValues = new ContentValues();
+
+        testValues.put(MovieContract.TrailerEntry.COLUMN_MOVIE_ID, 1111);
+        testValues.put(MovieContract.TrailerEntry.COLUMN_TRAILER_ID, "Sample");
+        testValues.put(MovieContract.TrailerEntry.COLUMN_KEY, "xyz");
+
+        return testValues;
+    }
+
+    static ContentValues[] createBulkInsertTrailerValues() {
+
+        ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
+
+        for (int i = 0; i < BULK_INSERT_RECORDS_TO_INSERT; i++) {
+            ContentValues values = new ContentValues();
+            values.put(MovieContract.TrailerEntry.COLUMN_MOVIE_ID, 1001 + i);
+            values.put(MovieContract.TrailerEntry.COLUMN_KEY, "Key-" + i);
+            values.put(MovieContract.TrailerEntry.COLUMN_TRAILER_ID, "Id-" + i);
+
+            returnContentValues[i] = values;
+        }
+        return returnContentValues;
+    }
+
+    /* Create a record for the Movie Database using ContentValues */
+    static ContentValues createReviewRecord() {
+        ContentValues testValues = new ContentValues();
+
+        testValues.put(MovieContract.ReviewEntry.COLUMN_MOVIE_ID, 1111);
+        testValues.put(MovieContract.ReviewEntry.COLUMN_REVIEW_ID, "Sample");
+        testValues.put(MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME, "autor");
+        testValues.put(MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT, "Content");
+
+        return testValues;
+    }
+
+    static ContentValues[] createBulkInsertReviewValues() {
+
+        ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
+
+        for (int i = 0; i < BULK_INSERT_RECORDS_TO_INSERT; i++) {
+            ContentValues values = new ContentValues();
+            values.put(MovieContract.ReviewEntry.COLUMN_MOVIE_ID, 1001 + i);
+            values.put(MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME, "Author");
+            values.put(MovieContract.ReviewEntry.COLUMN_REVIEW_ID, "Id-" + i);
+            values.put(MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT, "Sample Content");
+
+            returnContentValues[i] = values;
+        }
+        return returnContentValues;
+    }
+
+
     /* validate the record from cursor with original Contentvalues */
-    static void validateCurrentMovieRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
+    static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
+
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
 
         for (Map.Entry<String, Object> entry : valueSet) {
@@ -110,6 +189,7 @@ public class TestUtilites extends AndroidTestCase {
             mHT.quit();
         }
     }
+
     static TestContentObserver getTestContentObserver() {
         return TestContentObserver.getTestContentObserver();
     }

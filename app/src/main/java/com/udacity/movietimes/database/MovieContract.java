@@ -23,12 +23,13 @@ import android.provider.BaseColumns;
 /**
  * This is contract class for movie database having table and column names. This class will be use by DbHelper class to
  * interact with the SQLite database.
+ * Tables : Movie, Trailer, Review
  * Created by ramakant on 9/6/2015.
  */
 public final class MovieContract {
 
     // For DbHelper
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "movie.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
@@ -41,19 +42,19 @@ public final class MovieContract {
     public static final String CONTENT_AUTHORITY = "com.udacity.movietimes";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_MOVIE = "movie";
-
+    public static final String PATH_TRAILER = "trailer";
+    public static final String PATH_REVIEW = "reviews";
 
 
     //To prevent instantiating this class
     private MovieContract() {
     }
 
+
     //Abstract inner class the defines the constant of the movie table
     public static abstract class MovieEntry implements BaseColumns {
 
-        /**
-         * Table Details for MovieDbHelper
-         */
+        // Movie table name
         public static final String TABLE_NAME = "movie";
 
         // Movie table column name
@@ -63,10 +64,6 @@ public final class MovieContract {
         public static final String COLUMN_POSTER_PATH = "poster_path";
         public static final String COLUMN_RATING = "rating";
         public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_TRAILER_ID = "trailer_id";
-        public static final String COLUMN_USER_REVIEW = "user_review";
-
-        // Flag columns used in the movie database for popular, high rate and favorite query
         public static final String COLUMN_POPULAR = "popular";
         public static final String COLUMN_HIGH_RATE = "high_rate";
         public static final String COLUMN_FAVORITE = "favorite";
@@ -75,23 +72,22 @@ public final class MovieContract {
         public static final String CREATE_TABLE = "CREATE TABLE " +
                 TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
-                COLUMN_MOVIE_ID + INTEGER_TYPE + " UNIQUE " + NOT_NULL + COMMA_SEP +
+                COLUMN_MOVIE_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
                 COLUMN_TITLE + TEXT_TYPE + NOT_NULL + COMMA_SEP +
-                COLUMN_RELEASE_DATE + TEXT_TYPE + NOT_NULL + COMMA_SEP +
-                COLUMN_POSTER_PATH + TEXT_TYPE + NOT_NULL + COMMA_SEP +
+                COLUMN_RELEASE_DATE + TEXT_TYPE + COMMA_SEP +
+                COLUMN_POSTER_PATH + TEXT_TYPE + COMMA_SEP +
                 COLUMN_RATING + REAL_TYPE + NOT_NULL + COMMA_SEP +
-                COLUMN_OVERVIEW + TEXT_TYPE +  COMMA_SEP +
-                COLUMN_TRAILER_ID + TEXT_TYPE + NOT_NULL + COMMA_SEP +
-                COLUMN_USER_REVIEW + TEXT_TYPE + COMMA_SEP +
+                COLUMN_OVERVIEW + TEXT_TYPE + COMMA_SEP +
                 COLUMN_POPULAR + TEXT_TYPE + COMMA_SEP +
                 COLUMN_HIGH_RATE + TEXT_TYPE + COMMA_SEP +
-                COLUMN_FAVORITE + TEXT_TYPE + ");";
+                COLUMN_FAVORITE + TEXT_TYPE + COMMA_SEP +
+                " UNIQUE (" + MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
 
         // Drop table statement for the movie table
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
 
-        /** Uri Matcher details for MovieProvider */
+        // Uri matcher details for Movie table
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
 
         public static final String CONTENT_TYPE =
@@ -99,24 +95,116 @@ public final class MovieContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE;
 
-        public static final String POPULAR_MOVIE = "popular";
-        public static final String HIGH_RATE_MOVIE = "rating";
-        public static final String FAVORITE_MOVIE = "favorite";
-
-        // This method will return the Uri for querying popular/high rate/favorite movies
-        public static Uri buildMovieWithChoice(String choice) {
-            return CONTENT_URI.buildUpon().appendPath(choice).build();
-        }
-
         // This method will return the Uri for querying a specific movie detail with an movie id
-        public static Uri buildMovieWithMovieId(int movieId) {
-            return CONTENT_URI.buildUpon().appendPath(Integer.toString(movieId)).build();
+        public static Uri buildMovieWithMovieId(Long _id) {
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(_id)).build();
         }
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static long getIdFromUri(Uri uri) {
+            return ContentUris.parseId(uri);
+        }
     }
+
+    //Abstract inner class the defines the constant of the Trailer table
+    public static abstract class TrailerEntry implements BaseColumns {
+
+        // Trailer table name
+        public static final String TABLE_NAME = "trailer";
+
+        // Trailer table column name
+        public static final String COLUMN_MOVIE_ID = "movie_id";
+        public static final String COLUMN_KEY = "title";
+        public static final String COLUMN_TRAILER_ID = "release_date";
+
+
+        //Create statement for the Trailer table
+        public static final String CREATE_TABLE = "CREATE TABLE " +
+                TABLE_NAME + " (" +
+                _ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
+                COLUMN_MOVIE_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
+                COLUMN_KEY + TEXT_TYPE + COMMA_SEP +
+                COLUMN_TRAILER_ID + TEXT_TYPE + COMMA_SEP +
+                " UNIQUE (" + MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
+
+        // Drop table statement for the movie table
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+
+        // Uri matcher details for Movie table
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRAILER).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRAILER;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRAILER;
+
+        // This method will return the Uri for querying a specific movie detail with an movie id
+        public static Uri buildTrailerWithMovieId(Long _id) {
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(_id)).build();
+        }
+
+        public static Uri buildTrailerUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getIdFromUri(Uri uri) {
+            return ContentUris.parseId(uri);
+        }
+    }
+
+    //Abstract inner class the defines the constant of the Review table
+    public static abstract class ReviewEntry implements BaseColumns {
+
+        // Trailer table name
+        public static final String TABLE_NAME = "review";
+
+        // Trailer table column name
+        public static final String COLUMN_MOVIE_ID = "movie_id";
+        public static final String COLUMN_REVIEW_ID = "review_id";
+        public static final String COLUMN_AUTHOR_NAME = "author_name";
+        public static final String COLUMN_REVIEW_CONTENT = "content";
+
+
+        //Create statement for the Trailer table
+        public static final String CREATE_TABLE = "CREATE TABLE " +
+                TABLE_NAME + " (" +
+                _ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
+                COLUMN_MOVIE_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
+                COLUMN_REVIEW_ID + TEXT_TYPE + COMMA_SEP +
+                COLUMN_AUTHOR_NAME + TEXT_TYPE + COMMA_SEP +
+                COLUMN_REVIEW_CONTENT + TEXT_TYPE + COMMA_SEP +
+                " UNIQUE (" + MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
+
+        // Drop table statement for the movie table
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+
+        // Uri matcher details for Movie table
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_REVIEW).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
+
+        // This method will return the Uri for querying a specific movie detail with an movie id
+        public static Uri buildReviewWithMovieId(Long _id) {
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(_id)).build();
+        }
+
+        public static Uri buildReviewUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getIdFromUri(Uri uri) {
+            return ContentUris.parseId(uri);
+        }
+
+    }
+
 
 }

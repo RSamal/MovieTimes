@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
+import com.udacity.movietimes.Utils.TestUtilites;
 
 
 /**
@@ -76,7 +77,7 @@ public class TestDb extends AndroidTestCase {
 
         // Sixth step : validate the record in Cursor with original content values
 
-        TestUtilites.validateCurrentMovieRecord("Error: Movie querry validation failed", cursor, testValue);
+        TestUtilites.validateCurrentRecord("Error: Movie querry validation failed", cursor, testValue);
 
         // Move the cursor to the next record to demonstrate there is only one record in the database
         assertFalse("Error: More than one record returned from the querry", cursor.moveToNext());
@@ -85,6 +86,107 @@ public class TestDb extends AndroidTestCase {
         database.close();
 
     }
+
+    public void testTrailerTable() {
+
+        // First Step : Delete the database to create an empty database for the testcase
+        deleteMovieDatabae();
+
+        // Second Step : Get a reference to WritableDatabase
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        MovieDbHelper dbHelper = new MovieDbHelper(mContext);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        assertEquals(true, database.isOpen());
+
+        // Third Step : Create a movie record using Contentvalues
+        ContentValues testValue = TestUtilites.createTrailerRecord();
+
+        // Fourth Step : Insert the ContentValue into the database and get a Row Id back
+        long movieRowId;
+        movieRowId = database.insert(MovieContract.TrailerEntry.TABLE_NAME, null, testValue);
+
+        // Verify we got a row back
+        assertTrue("Error: Failure to insert the record", movieRowId != -1);
+
+        // Fifith Step : Querry the database to receive a cursor back
+        Cursor cursor = database.query(
+                MovieContract.TrailerEntry.TABLE_NAME, // Table to query
+                null, // all columns
+                null, // columns for the where clause
+                null, // values for the where clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null  // sort order
+
+        );
+
+
+        // Move the cursor to valid database row and check to see if we get any record back
+        assertTrue("Error: No records return from the location query", cursor.moveToFirst());
+
+        // Sixth step : validate the record in Cursor with original content values
+
+        TestUtilites.validateCurrentRecord("Error: Movie querry validation failed", cursor, testValue);
+
+        // Move the cursor to the next record to demonstrate there is only one record in the database
+        assertFalse("Error: More than one record returned from the querry", cursor.moveToNext());
+
+        cursor.close();
+        database.close();
+
+    }
+
+    public void testReviewTable() {
+
+        // First Step : Delete the database to create an empty database for the testcase
+        deleteMovieDatabae();
+
+        // Second Step : Get a reference to WritableDatabase
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        MovieDbHelper dbHelper = new MovieDbHelper(mContext);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        assertEquals(true, database.isOpen());
+
+        // Third Step : Create a movie record using Contentvalues
+        ContentValues testValue = TestUtilites.createReviewRecord();
+
+        // Fourth Step : Insert the ContentValue into the database and get a Row Id back
+        long movieRowId;
+        movieRowId = database.insert(MovieContract.ReviewEntry.TABLE_NAME, null, testValue);
+
+        // Verify we got a row back
+        assertTrue("Error: Failure to insert the record", movieRowId != -1);
+
+        // Fifith Step : Querry the database to receive a cursor back
+        Cursor cursor = database.query(
+                MovieContract.ReviewEntry.TABLE_NAME, // Table to query
+                null, // all columns
+                null, // columns for the where clause
+                null, // values for the where clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null  // sort order
+
+        );
+
+
+        // Move the cursor to valid database row and check to see if we get any record back
+        assertTrue("Error: No records return from the location query", cursor.moveToFirst());
+
+        // Sixth step : validate the record in Cursor with original content values
+
+        TestUtilites.validateCurrentRecord("Error: Movie querry validation failed", cursor, testValue);
+
+        // Move the cursor to the next record to demonstrate there is only one record in the database
+        assertFalse("Error: More than one record returned from the querry", cursor.moveToNext());
+
+        cursor.close();
+        database.close();
+
+    }
+
 
 
 }
