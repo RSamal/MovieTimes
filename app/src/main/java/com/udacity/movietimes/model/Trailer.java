@@ -21,16 +21,44 @@ import java.util.List;
 
 /**
  * Created by ramakant on 8/26/2015.
- *
- * This class contains the model object return for vedios from MovieDb
+ * This class contains the model object return for Trailer from MovieDb
  */
 public class Trailer {
 
     @SerializedName("results")
-    private List<Vedio> mVedios;
+    private List<MovieTrailer> trailerList;
 
+    public List<MovieTrailer> getTrailerList() {
+        return trailerList;
+    }
 
-    public List<Vedio> getmVedios() {
-        return mVedios;
+    public static class MovieTrailer {
+        @SerializedName("id")
+        private String mId;
+
+        @SerializedName("key")
+        private String mKey;
+
+        @SerializedName("name")
+        private String mTrailerTitle;
+
+        @SerializedName("site")
+        private String mSite;
+
+        public String getId() {
+            return mId;
+        }
+
+        public String getKey() {
+            return mKey;
+        }
+
+        public String getTrailerTitle() {
+            return mTrailerTitle;
+        }
+
+        public String getSite() {
+            return mSite;
+        }
     }
 }

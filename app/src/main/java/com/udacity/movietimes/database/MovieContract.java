@@ -29,7 +29,7 @@ import android.provider.BaseColumns;
 public final class MovieContract {
 
     // For DbHelper
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "movie.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
@@ -128,7 +128,7 @@ public final class MovieContract {
                 COLUMN_MOVIE_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
                 COLUMN_KEY + TEXT_TYPE + COMMA_SEP +
                 COLUMN_TRAILER_ID + TEXT_TYPE + COMMA_SEP +
-                " UNIQUE (" + MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
+                " UNIQUE (" + TrailerEntry.COLUMN_TRAILER_ID + ") ON CONFLICT REPLACE);";
 
         // Drop table statement for the movie table
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -177,7 +177,7 @@ public final class MovieContract {
                 COLUMN_REVIEW_ID + TEXT_TYPE + COMMA_SEP +
                 COLUMN_AUTHOR_NAME + TEXT_TYPE + COMMA_SEP +
                 COLUMN_REVIEW_CONTENT + TEXT_TYPE + COMMA_SEP +
-                " UNIQUE (" + MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
+                " UNIQUE (" + ReviewEntry.COLUMN_REVIEW_ID + ") ON CONFLICT REPLACE);";
 
         // Drop table statement for the movie table
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

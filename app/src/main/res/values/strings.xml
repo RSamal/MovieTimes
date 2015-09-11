@@ -8,4 +8,17 @@
     <string name="rating">Rating</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="noTrailer">No Trailer Availiable</string>
+    
+    <!-- Shared preference Details -->
+    <string name="prefernce_key_file">ccom.udacity.movietimes</string>
+
+    <!-- API keys and possible values -->
+    <string name="api.sort.key" translatable="false">sortOrder</string>
+    <string name="api.sort.popularity" translatable="false">popularity.desc</string>
+    <string name="api.sort.votes" translatable="false">vote_average.desc</string>
+    <string name="api.image.size.default" translatable="false">w185</string>
+
+
+
+
 </resources>

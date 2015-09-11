@@ -40,7 +40,7 @@ public class TestUtilites extends AndroidTestCase {
     static public final int BULK_INSERT_RECORDS_TO_INSERT = 10;
 
     /* Create a record for the Movie Database using ContentValues */
-    static ContentValues createMovieRecord() {
+    public static ContentValues createMovieRecord() {
         ContentValues testValues = new ContentValues();
 
         testValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, 1111);
@@ -57,7 +57,7 @@ public class TestUtilites extends AndroidTestCase {
     }
 
 
-    static ContentValues[] createBulkInsertMovieValues() {
+    public static ContentValues[] createBulkInsertMovieValues() {
 
         ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
 
@@ -79,7 +79,7 @@ public class TestUtilites extends AndroidTestCase {
     }
 
     /* Create a record for the Movie Database using ContentValues */
-    static ContentValues createTrailerRecord() {
+    public static ContentValues createTrailerRecord() {
         ContentValues testValues = new ContentValues();
 
         testValues.put(MovieContract.TrailerEntry.COLUMN_MOVIE_ID, 1111);
@@ -89,7 +89,7 @@ public class TestUtilites extends AndroidTestCase {
         return testValues;
     }
 
-    static ContentValues[] createBulkInsertTrailerValues() {
+    public static ContentValues[] createBulkInsertTrailerValues() {
 
         ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
 
@@ -105,7 +105,7 @@ public class TestUtilites extends AndroidTestCase {
     }
 
     /* Create a record for the Movie Database using ContentValues */
-    static ContentValues createReviewRecord() {
+    public static ContentValues createReviewRecord() {
         ContentValues testValues = new ContentValues();
 
         testValues.put(MovieContract.ReviewEntry.COLUMN_MOVIE_ID, 1111);
@@ -116,7 +116,7 @@ public class TestUtilites extends AndroidTestCase {
         return testValues;
     }
 
-    static ContentValues[] createBulkInsertReviewValues() {
+    public static ContentValues[] createBulkInsertReviewValues() {
 
         ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
 
@@ -134,7 +134,7 @@ public class TestUtilites extends AndroidTestCase {
 
 
     /* validate the record from cursor with original Contentvalues */
-    static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
+    public static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
 
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
 
@@ -149,11 +149,11 @@ public class TestUtilites extends AndroidTestCase {
         }
     }
 
-    static class TestContentObserver extends ContentObserver {
+    public static class TestContentObserver extends ContentObserver {
         final HandlerThread mHT;
         boolean mContentChanged;
 
-        static TestContentObserver getTestContentObserver() {
+        public static TestContentObserver getTestContentObserver() {
             HandlerThread ht = new HandlerThread("ContentObserverThread");
             ht.start();
             return new TestContentObserver(ht);
@@ -182,7 +182,7 @@ public class TestUtilites extends AndroidTestCase {
             // testing framework is not running on the main Android application thread.
             new PollingCheck(5000) {
                 @Override
-                protected boolean check() {
+                public boolean check() {
                     return mContentChanged;
                 }
             }.run();
@@ -190,7 +190,7 @@ public class TestUtilites extends AndroidTestCase {
         }
     }
 
-    static TestContentObserver getTestContentObserver() {
+    public static TestContentObserver getTestContentObserver() {
         return TestContentObserver.getTestContentObserver();
     }
 }

@@ -156,55 +156,55 @@ public class DetailActivity extends AppCompatActivity {
      */
     public void setMovieTrailer(final String movieId) {
 
-        /** To get the Movie Trailer Id from Movie Db */
-        final Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_ID_URL).buildUpon()
-                .appendPath(movieId)
-                .appendPath(MovieUrl.VIDEOS)
-                .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
-
-        mRequestQueue = ConnectionManager.getRequestQueue(getApplicationContext());
-        StringRequest request = new StringRequest(Request.Method.GET, mTrailerUrl.toString(), new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                mTrailer = new Gson().fromJson(response, Trailer.class);
-
-                /**To get the Thumbnail from Youtube and set it on Image throug Picasso */
-                if (mTrailer.getmVedios().size() != 0) {
-                    mVedioId = mTrailer.getmVedios().get(0).getmKey();
-
-                    Uri.Builder mVedioUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_BASE_URL).buildUpon()
-                            .appendPath(mVedioId)
-                            .appendPath(MovieUrl.VEDIO_TN_SIZE);
-
-                    Picasso.with(getApplicationContext()).load(mVedioUrl.toString()).into(mVedioImage);
-
-                    mVedio.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            try {
-                                Intent intent = YouTubeStandalonePlayer.createVideoIntent(DetailActivity.this, MovieConfig.GOOGLE_API_KEY, mVedioId);
-                                startActivity(intent);
-                            } catch (ActivityNotFoundException e) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mVedioId));
-                                startActivity(intent);
-                            }
-                        }
-                    });
-                } else {
-                    mNoTrailerMessage.setText(R.string.noTrailer);
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mNoTrailerMessage.setText(R.string.noTrailer);
-            }
-
-        });
-
-        mRequestQueue.add(request);
+//        /** To get the Movie Trailer Id from Movie Db */
+//        final Uri.Builder mTrailerUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_ID_URL).buildUpon()
+//                .appendPath(movieId)
+//                .appendPath(MovieUrl.VIDEOS)
+//                .appendQueryParameter(MovieUrl.API_KEY_PARM, MovieConfig.MOVIEDB_API_KEY);
+//
+//        mRequestQueue = ConnectionManager.getRequestQueue(getApplicationContext());
+//        StringRequest request = new StringRequest(Request.Method.GET, mTrailerUrl.toString(), new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//                mTrailer = new Gson().fromJson(response, Trailer.class);
+//
+//                /**To get the Thumbnail from Youtube and set it on Image throug Picasso */
+//                if (mTrailer.getmVedios().size() != 0) {
+//                    mVedioId = mTrailer.getmVedios().get(0).getmKey();
+//
+//                    Uri.Builder mVedioUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_BASE_URL).buildUpon()
+//                            .appendPath(mVedioId)
+//                            .appendPath(MovieUrl.VEDIO_TN_SIZE);
+//
+//                    Picasso.with(getApplicationContext()).load(mVedioUrl.toString()).into(mVedioImage);
+//
+//                    mVedio.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            try {
+//                                Intent intent = YouTubeStandalonePlayer.createVideoIntent(DetailActivity.this, MovieConfig.GOOGLE_API_KEY, mVedioId);
+//                                startActivity(intent);
+//                            } catch (ActivityNotFoundException e) {
+//                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mVedioId));
+//                                startActivity(intent);
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    mNoTrailerMessage.setText(R.string.noTrailer);
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                mNoTrailerMessage.setText(R.string.noTrailer);
+//            }
+//
+//        });
+//
+//        mRequestQueue.add(request);
 
     }
 

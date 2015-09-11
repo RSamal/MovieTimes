@@ -21,6 +21,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.udacity.movietimes.database.MovieContract.MovieEntry;
@@ -44,6 +45,14 @@ public class MovieProvider extends ContentProvider {
 
     public static final int REVIEW = 300;
     public static final int REVIEW_WITH_ID = 301;
+
+    public static final int MOVIE_WITH_TRAILER_AND_REVIEW = 400;
+
+
+
+    static {
+
+    }
 
     static UriMatcher buildUriMatcher() {
 
