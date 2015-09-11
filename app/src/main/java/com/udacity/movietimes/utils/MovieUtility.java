@@ -43,11 +43,11 @@ public class MovieUtility {
             Movie movie = movies.get(i);
 
             values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getmId());
-            values.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getmId());
-            values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getmId());
-            values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getmId());
-            values.put(MovieContract.MovieEntry.COLUMN_RATING, movie.getmId());
-            values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getmId());
+            values.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getmTitle());
+            values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getmReleaseDate());
+            values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getmPosterPath());
+            values.put(MovieContract.MovieEntry.COLUMN_RATING, movie.getmVoteAvg());
+            values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getmOverview());
             if (getPreferedSortOrder(context) == context.getString(R.string.api_sort_popularity)) {
                 values.put(MovieContract.MovieEntry.COLUMN_POPULAR, "Y");
                 values.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "N");

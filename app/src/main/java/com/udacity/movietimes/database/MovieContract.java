@@ -26,10 +26,10 @@ import android.provider.BaseColumns;
  * Tables : Movie, Trailer, Review
  * Created by ramakant on 9/6/2015.
  */
-public final class MovieContract {
+public final class  MovieContract {
 
     // For DbHelper
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "movie.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
