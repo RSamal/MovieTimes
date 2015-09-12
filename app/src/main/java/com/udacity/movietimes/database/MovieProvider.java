@@ -18,11 +18,13 @@ package com.udacity.movietimes.database;
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 import com.udacity.movietimes.database.MovieContract.MovieEntry;
 import com.udacity.movietimes.model.Movie;
@@ -35,6 +37,7 @@ import com.udacity.movietimes.model.Movie;
  */
 public class MovieProvider extends ContentProvider {
 
+    private static final String LOG_TAG = MovieProvider.class.getSimpleName();
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDbHelper mOpenHelper;
 
@@ -260,6 +263,8 @@ public class MovieProvider extends ContentProvider {
             case MOVIE_WITH_TRAILER_AND_REVIEW:{
                 String[] args = {MovieEntry.getMovieIdFromUri(uri)};
                 retCursor = mOpenHelper.getReadableDatabase().rawQuery(joinQuery,args);
+                Log.d(LOG_TAG, Integer.toString(retCursor.getCount()));
+                break;
             }
 
             default:

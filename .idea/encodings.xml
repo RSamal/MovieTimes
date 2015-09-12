@@ -6,7 +6,6 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/udacity/movietimes/sync/MovieAuthenticatorService.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/udacity/movietimes/sync/MovieSyncAdapter.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/udacity/movietimes/sync/MovieSyncService.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/assets/fontawesome.ttf" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/menu/menu_movie.xml" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/xml/authenticator.xml" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/xml/syncadapter.xml" charset="windows-1252" />
