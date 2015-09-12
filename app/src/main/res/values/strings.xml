@@ -19,6 +19,13 @@
     <string name="api.image.size.default" translatable="false">w185</string>
 
 
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">movietimes.udacity.com</string>
+    <string name="content_authority">com.udacity.movietimes</string>
+    <string name="action_refresh">Refresh</string>
+
+    <!-- Intent Key constant for Message Transfer-->
+    <string name="intent_key">"com.udacity.movietimes.MESSAGE"</string>
 
 
 </resources>

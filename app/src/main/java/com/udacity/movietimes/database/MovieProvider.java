@@ -25,6 +25,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.udacity.movietimes.database.MovieContract.MovieEntry;
+import com.udacity.movietimes.model.Movie;
 
 
 /**
@@ -49,6 +50,70 @@ public class MovieProvider extends ContentProvider {
     public static final int MOVIE_WITH_TRAILER_AND_REVIEW = 400;
 
 
+    /**
+     * Join Parameters :
+     * (SELECT MOVIE) LEFT JOIN (SELECT TRAILER) LEFT JOIN (SELEC REVIEWS)  --- JOIN PREDICATE CONDITION is movieId for all tables
+     */
+    private static SQLiteQueryBuilder resultSet = null;
+    private static SQLiteQueryBuilder selectMovie = null;
+    private static SQLiteQueryBuilder selectTrailer = null;
+    private static SQLiteQueryBuilder selectReview = null;
+
+    private static final String[] MOVIE_COLUMNS = {
+            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+            MovieContract.MovieEntry.COLUMN_TITLE,
+            MovieContract.MovieEntry.COLUMN_POSTER_PATH,
+            MovieContract.MovieEntry.COLUMN_RATING,
+            MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
+            MovieContract.MovieEntry.COLUMN_OVERVIEW
+    };
+
+
+    private static final String[] TRAILER_COLUMNS = {
+            MovieContract.TrailerEntry.COLUMN_MOVIE_ID,
+            MovieContract.TrailerEntry.COLUMN_KEY
+    };
+
+    private static final String[] REVIEW_COLUMNS = {
+            MovieContract.ReviewEntry.COLUMN_MOVIE_ID,
+            MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME,
+            MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT
+    };
+
+    private static String movieQuery;
+    private static String trailerQuery;
+    private static String reviewQuery;
+    private static String joinQuery;
+
+    // Build the Join Query
+    static {
+
+        // Build Sub querry to fetch data from Movie table based on movieId
+        selectMovie = new SQLiteQueryBuilder();
+        selectMovie.setTables(MovieContract.MovieEntry.TABLE_NAME);
+        movieQuery = selectMovie.buildQuery(null, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
+
+        // Build the sub querry for Trailer Table based on movieId
+        selectTrailer = new SQLiteQueryBuilder();
+        selectTrailer.setTables(MovieContract.TrailerEntry.TABLE_NAME);
+        trailerQuery = selectTrailer.buildQuery(null, MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, "1");
+
+        // Builed the sub querry for Review table based on movieId
+        selectReview = new SQLiteQueryBuilder();
+        selectReview.setTables(MovieContract.ReviewEntry.TABLE_NAME);
+        reviewQuery = selectReview.buildQuery(null, MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
+
+        // Final JOIN Querry
+        resultSet = new SQLiteQueryBuilder();
+        resultSet.setTables("(" + movieQuery + ") T1 LEFT JOIN (" + trailerQuery + ") T2 ON " +
+                        "T1." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = T2." + MovieContract.TrailerEntry.COLUMN_MOVIE_ID
+                        + " LEFT JOIN (" + reviewQuery + ") T3 ON " +
+                        "T1." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = T3." + MovieContract.ReviewEntry.COLUMN_MOVIE_ID
+        );
+
+        joinQuery = resultSet.buildQuery(null,null,null,null,null,null,null);
+    }
+
 
     static UriMatcher buildUriMatcher() {
 
@@ -63,6 +128,10 @@ public class MovieProvider extends ContentProvider {
 
         matcher.addURI(authority, MovieContract.PATH_REVIEW, REVIEW);
         matcher.addURI(authority, MovieContract.PATH_REVIEW + "/#", REVIEW_WITH_ID);
+
+        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/details/*", MOVIE_WITH_TRAILER_AND_REVIEW );
+
+
 
         return matcher;
     }
@@ -90,6 +159,8 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.ReviewEntry.CONTENT_TYPE;
             case REVIEW_WITH_ID:
                 return MovieContract.ReviewEntry.CONTENT_ITEM_TYPE;
+            case MOVIE_WITH_TRAILER_AND_REVIEW:
+                return MovieContract.MovieEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri:" + uri);
         }
@@ -184,6 +255,11 @@ public class MovieProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
+            }
+            // "movie/details/#"
+            case MOVIE_WITH_TRAILER_AND_REVIEW:{
+                String[] args = {MovieEntry.getMovieIdFromUri(uri)};
+                retCursor = mOpenHelper.getReadableDatabase().rawQuery(joinQuery,args);
             }
 
             default:

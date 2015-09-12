@@ -26,7 +26,7 @@ import android.provider.BaseColumns;
  * Tables : Movie, Trailer, Review
  * Created by ramakant on 9/6/2015.
  */
-public final class  MovieContract {
+public final class MovieContract {
 
     // For DbHelper
     public static final int DATABASE_VERSION = 4;
@@ -102,6 +102,19 @@ public final class  MovieContract {
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildMovieDetailUri(int movieId) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath("details")
+                    .appendPath(Integer.toString(movieId))
+                    .build();
+        }
+
+        public static String getMovieIdFromUri(Uri uri) {
+            String path = uri.getPath();
+            String movieId = path.substring(path.lastIndexOf('/') + 1);
+            return movieId;
         }
 
         public static long getIdFromUri(Uri uri) {

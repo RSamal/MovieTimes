@@ -28,6 +28,13 @@ public class TesturiMatcher extends AndroidTestCase {
     // content://com.udacity.movietimes/review/#"
     private static final Uri TEST_REVIEW_WITH_ID_DIR = MovieContract.ReviewEntry.buildReviewWithMovieId(_ID);
 
+    // content://com.udacity.movietimes/#/details
+    private static final Uri TEST_MOVIE_WITH_TRAILER_AND_REVIEW = MovieContract.MovieEntry.buildMovieDetailUri(1111);
+    private static final Uri Sample = Uri.parse("content://com.udacity.movietimes/movie/details/76341");
+
+    Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf("76341"));
+
+
 
     public void testUriMatcher() {
         UriMatcher testMatcher = MovieProvider.buildUriMatcher();
@@ -46,6 +53,11 @@ public class TesturiMatcher extends AndroidTestCase {
                 testMatcher.match(TEST_REVIEW_DIR), MovieProvider.REVIEW);
         assertEquals("Error: The Review with id was matched incorrectly.",
                 testMatcher.match(TEST_REVIEW_WITH_ID_DIR), MovieProvider.REVIEW_WITH_ID);
+
+        assertEquals("Error : The movie detail URL was matched incorrectly",
+                testMatcher.match(TEST_MOVIE_WITH_TRAILER_AND_REVIEW), MovieProvider.MOVIE_WITH_TRAILER_AND_REVIEW);
+        assertEquals("Error : The movie detail URL was matched incorrectly",
+                testMatcher.match(movieDetailUri), MovieProvider.MOVIE_WITH_TRAILER_AND_REVIEW);
 
     }
 

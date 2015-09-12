@@ -12,12 +12,8 @@ import android.util.Log;
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.database.MovieDbHelper;
-import com.udacity.movietimes.model.Movie;
-import com.udacity.movietimes.model.Trailer;
-import com.udacity.movietimes.webservices.FetchMovieDetails;
+import com.udacity.movietimes.sync.MovieSyncAdapter;
 
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by ramakant on 9/10/2015.
@@ -69,8 +65,7 @@ public class TestFetchMovieDetail extends AndroidTestCase {
         );
 
         Thread thread = Thread.currentThread();
-        FetchMovieDetails details = new FetchMovieDetails(mContext);
-        details.callMovieDbRest();
+        MovieSyncAdapter.syncImmediately(mContext);
         Thread.sleep(3000);
 
         Cursor cursor = mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null, null);

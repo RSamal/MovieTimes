@@ -16,6 +16,7 @@
 package com.udacity.movietimes.fragments;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -27,16 +28,22 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.udacity.movietimes.R;
+import com.udacity.movietimes.activities.DetailActivity;
 import com.udacity.movietimes.adapter.MovieListAdapter;
 import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.model.Movie;
+import com.udacity.movietimes.sync.MovieSyncAdapter;
 import com.udacity.movietimes.utils.MovieUtility;
-import com.udacity.movietimes.webservices.FetchMovieDetails;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +81,28 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_movie, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            updateMovie();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void updateMovie() {
+        MovieSyncAdapter.syncImmediately(getActivity());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -86,25 +115,24 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
         mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
         mGridView.setAdapter(mMovieListAdapter);
 
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) mMovieListAdapter.getItem(position);
+                if (cursor != null) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), DetailActivity.class);
+                    intent.putExtra(Intent.EXTRA_STREAM, cursor.getString(MovieUtility.COL_MOVIE_ID));
+                    startActivity(intent);
+
+                }
+            }
+        });
+
+
         return view;
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        preferences.edit().putString(
-                getActivity().getString(R.string.api_sort_key),
-                getActivity().getString(R.string.api_sort_popularity)
-        );
-
-        // Fetch the Movie Details
-
-        FetchMovieDetails details = new FetchMovieDetails(getActivity());
-        details.callMovieDbRest();
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -121,7 +149,7 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
         return new CursorLoader(getActivity(),
                 MovieContract.MovieEntry.CONTENT_URI,
                 MovieUtility.MOVIE_COLUMNS,
-                null,
+                MovieContract.MovieEntry.COLUMN_FAVORITE + " = ?",
                 null,
                 null
         );
@@ -130,7 +158,7 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.d("LOOOO",Integer.toString(cursor.getCount()));
+        Log.d("LOOOO", Integer.toString(cursor.getCount()));
         mMovieListAdapter.swapCursor(cursor);
     }
 

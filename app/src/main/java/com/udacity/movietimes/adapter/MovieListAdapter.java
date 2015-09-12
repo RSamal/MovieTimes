@@ -16,13 +16,12 @@
 package com.udacity.movietimes.adapter;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +32,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.movietimes.R;
-import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.utils.ColorGenerator;
 import com.udacity.movietimes.utils.MovieUrl;
 import com.udacity.movietimes.utils.MovieUtility;
-
-import java.util.List;
 
 /**
  * Created by ramakantasamal on 8/24/15.
@@ -61,7 +57,7 @@ public class MovieListAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
 
-        View view = LayoutInflater.from(context).inflate(R.layout.moviee_list, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.moviee_grid, parent, false);
 
         MovieViewHolder viewHolder = new MovieViewHolder(view);
         view.setTag(viewHolder);
@@ -111,14 +107,17 @@ public class MovieListAdapter extends CursorAdapter {
         CardView cardView = null;
         ImageView poster = null;
         TextView title = null;
+        TextView favorite = null;
         RatingBar rating = null;
+
 
         public MovieViewHolder(View itemView) {
 
             cardView = (CardView) itemView.findViewById(R.id.card_view);
-            poster = (ImageView) itemView.findViewById(R.id.movie_list_poster);
-            title = (TextView) itemView.findViewById(R.id.movie_list_title);
-            rating = (RatingBar) itemView.findViewById(R.id.movie_list_rating);
+            poster = (ImageView) itemView.findViewById(R.id.movie_grid_poster);
+            title = (TextView) itemView.findViewById(R.id.movie_grid_title);
+            rating = (RatingBar) itemView.findViewById(R.id.movie_grid_rating);
+
 
 
         }

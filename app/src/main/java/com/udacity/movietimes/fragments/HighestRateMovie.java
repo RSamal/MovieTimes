@@ -16,6 +16,7 @@
 package com.udacity.movietimes.fragments;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -27,16 +28,21 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.udacity.movietimes.R;
+import com.udacity.movietimes.activities.DetailActivity;
 import com.udacity.movietimes.adapter.MovieListAdapter;
 import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.utils.MovieUtility;
-import com.udacity.movietimes.webservices.FetchMovieDetails;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,25 +92,26 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
         mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
         mGridView.setAdapter(mMovieListAdapter);
 
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) mMovieListAdapter.getItem(position);
+                if (cursor != null) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), DetailActivity.class);
+                    intent.putExtra(Intent.EXTRA_STREAM, cursor.getString(MovieUtility.COL_MOVIE_ID));
+                    startActivity(intent);
+
+                }
+            }
+        });
+
+
         return view;
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        preferences.edit().putString(
-                getActivity().getString(R.string.api_sort_key),
-                getActivity().getString(R.string.api_sort_votes)
-        );
 
-        // Fetch the Movie Details
-
-        FetchMovieDetails details = new FetchMovieDetails(getActivity());
-        details.callMovieDbRest();
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

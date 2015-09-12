@@ -23,7 +23,7 @@ public interface MovieApiEndPoint {
      * @param callback
      */
     @GET("/discover/movie?api_key=" + MovieConfig.MOVIEDB_API_KEY)
-    void getTopMovies(@Query("sortby") String sortOrder, Callback<Movies> callback);
+    void getTopMovies(@Query("sort_by") String sortOrder, Callback<Movies> callback);
 
     /**
      * This method sends a GET request to MovieDb with a movie Id and get ths response back in JSON format.

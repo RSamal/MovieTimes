@@ -1,130 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.udacity.movietimes.activities.DetailActivity">
-
-
-    <!-- Include the youtube thumbnail for Trailer of the movie -->
-    <RelativeLayout
-        android:id="@+id/detail_activity_vedio"
-        android:layout_width="fill_parent"
-        android:layout_height="200dp">
-
-        <!-- ImageView or your Thumbnail -->
-        <ImageView
-            android:id="@+id/detail_activity_vedio_img"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitXY" />
-
-        <!-- ImageView of your button -->
-        <ImageView
-            android:id="@+id/detail_activity_vedio_play"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/play" />
-
-        <!-- TextView to display no trailer Msg -->
-        <TextView
-            android:id="@+id/detail_activity_msg_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/detail_activity_vedio_play"
-            android:layout_centerInParent="true"
-            android:textColor="@color/primaryTextColor"
-            android:textStyle="bold"/>
-
-    </RelativeLayout>
 
     <!-- Include the Toolbar as an AppBar -->
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar" />
 
-    <ScrollView
+    <fragment android:name="com.udacity.movietimes.fragments.DetailFragment"
+        android:id="@+id/detail_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/detail_activity_vedio">
-        <!-- Include the Movie content details -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="10dp">
+        android:layout_height="match_parent" />
 
-            <ImageView
-                android:id="@+id/detail_activity_poster"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_marginRight="10dp"
-                android:scaleType="fitStart"
-                android:src="@mipmap/ic_launcher" />
-
-            <TextView
-                android:id="@+id/detail_activity_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_toRightOf="@id/detail_activity_poster"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/detail_activity_release_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/detail_activity_title"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@id/detail_activity_poster"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="14sp" />
-
-            <View
-                android:id="@+id/detail_activity_separatorOne"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/detail_activity_poster"
-                android:layout_marginTop="10dp"
-                android:background="@color/divider" />
-
-            <RatingBar
-                android:id="@+id/detail_activity_rating"
-                style="?android:attr/ratingBarStyleIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/detail_activity_separatorOne"
-                android:layout_marginTop="10dp"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:stepSize="0.1" />
-
-            <View
-                android:id="@+id/detail_activity_separatorTwo"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/detail_activity_rating"
-                android:layout_marginTop="10dp"
-                android:background="@color/divider" />
-
-            <TextView
-                android:id="@+id/detail_activity_overview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/detail_activity_separatorTwo"
-                android:layout_marginTop="10dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-
-    </ScrollView>
-
-</RelativeLayout>
+</LinearLayout>

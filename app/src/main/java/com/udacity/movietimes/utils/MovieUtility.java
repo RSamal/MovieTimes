@@ -29,7 +29,8 @@ public class MovieUtility {
             MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
             MovieContract.MovieEntry.COLUMN_POSTER_PATH,
             MovieContract.MovieEntry.COLUMN_RATING,
-            MovieContract.MovieEntry.COLUMN_OVERVIEW
+            MovieContract.MovieEntry.COLUMN_OVERVIEW,
+            MovieContract.MovieEntry.COLUMN_FAVORITE
     };
 
     // These indices are tied to MOVIE_COLUMNS.  If MOVIE_COLUMNS changes, these
@@ -52,7 +53,7 @@ public class MovieUtility {
         return sortOrder;
     }
 
-    public static void storeMovies(Context context, List<Movie> movies) {
+    public static void storeMovies(Context context, List<Movie> movies, String sortOrder) {
 
         List<ContentValues> contentValues = new ArrayList<ContentValues>(movies.size());
 
@@ -68,7 +69,7 @@ public class MovieUtility {
             values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getmPosterPath());
             values.put(MovieContract.MovieEntry.COLUMN_RATING, movie.getmVoteAvg());
             values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getmOverview());
-            if (getPreferedSortOrder(context) == context.getString(R.string.api_sort_popularity)) {
+            if (sortOrder.equals(context.getString(R.string.api_sort_popularity))) {
                 values.put(MovieContract.MovieEntry.COLUMN_POPULAR, "Y");
                 values.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "N");
                 values.put(MovieContract.MovieEntry.COLUMN_HIGH_RATE, "N");

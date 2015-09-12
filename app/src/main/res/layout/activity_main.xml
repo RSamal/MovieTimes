@@ -14,18 +14,26 @@
         android:elevation="10dp">
 
         <!-- Include the Toolbar as an AppBar -->
-        <include
+        <android.support.v7.widget.Toolbar
             android:id="@+id/tool_bar"
-            layout="@layout/tool_bar"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+            <!--app:layout_scrollFlags="scroll|enterAlways">-->
+        </android.support.v7.widget.Toolbar>
 
         <!-- Adding a Tablayout for Popular and Highest Rate movie Selector -->
         <android.support.design.widget.TabLayout
             android:id="@+id/sliding_tab"
             style="@style/MovieTabLayout"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primaryColor"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabIndicatorColor="@android:color/white"
             app:tabGravity="fill"
             app:tabMode="scrollable" />
     </android.support.design.widget.AppBarLayout>
