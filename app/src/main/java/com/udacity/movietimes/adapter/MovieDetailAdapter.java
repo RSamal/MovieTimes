@@ -3,6 +3,7 @@ package com.udacity.movietimes.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.udacity.movietimes.utils.MovieUrl;
  */
 public class MovieDetailAdapter extends CursorAdapter {
 
+    private static final String LOG_TAG = MovieDetailAdapter.class.getSimpleName();
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_MOVIE_HEADER = 0;
     private static final int VIEW_TYPE_MOVIE_REVIEW = 1;
@@ -70,6 +72,7 @@ public class MovieDetailAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        Log.d(LOG_TAG,Integer.toString(cursor.getCount()));
         // Choose the layout type
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
@@ -93,6 +96,14 @@ public class MovieDetailAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        Log.d(LOG_TAG,cursor.getString(0));
+        Log.d(LOG_TAG,cursor.getString(1));
+        Log.d(LOG_TAG,cursor.getString(2));
+        Log.d(LOG_TAG,cursor.getString(3));
+        Log.d(LOG_TAG,cursor.getString(4));
+        Log.d(LOG_TAG,cursor.getString(5));
+        Log.d(LOG_TAG,cursor.getString(6));
+        Log.d(LOG_TAG,cursor.getString(7));
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
@@ -100,9 +111,10 @@ public class MovieDetailAdapter extends CursorAdapter {
         switch (viewType) {
             case VIEW_TYPE_MOVIE_HEADER: {
 
-                /** Set the Vedio Trailer of the movie from youtube */
+
                 StringBuilder imagePath = new StringBuilder(MovieUrl.MOVIE_IMAGE_BASE_URL)
                         .append(cursor.getString(DetailFragment.COL_POSTER_PATH));
+                Log.d(LOG_TAG,imagePath.toString());
                 Picasso.with(context).load(imagePath.toString()).into(viewHolder.poster);
 
                 break;

@@ -47,15 +47,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     };
 
     // Please note that the below contants belongs to the above querry column. Any change in the column need a change in the below index values
-    public static final int COL_MOVIE_ID = 0;
-    public static final int COL_TITLE = 1;
-    public static final int COL_POSTER_PATH = 2;
-    public static final int COL_RATING = 3;
+    public static final int COL_MOVIE_ID = 2;
+    public static final int COL_TITLE = 3;
     public static final int COL_RELEASE_DATE = 4;
-    public static final int COL_OVERVIEW = 5;
-    public static final int COL_KEY = 6;
-    public static final int COL_AUTHOR_NAME = 7;
-    public static final int COL_REVIEW_CONTENT = 8;
+    public static final int COL_POSTER_PATH = 5;
+    public static final int COL_RATING = 6;
+    public static final int COL_OVERVIEW = 7;
+    public static final int COL_KEY = 8;
+    public static final int COL_AUTHOR_NAME = 9;
+    public static final int COL_REVIEW_CONTENT = 10;
 
 
     private String movieId;
