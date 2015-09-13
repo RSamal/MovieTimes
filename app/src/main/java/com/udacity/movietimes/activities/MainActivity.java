@@ -83,13 +83,6 @@ public class MainActivity extends AppCompatActivity implements Callback {
         if (findViewById(R.id.detail_fragment_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
-
-                // To show the defulat item on Detail Container Fragment if nothing has selected
-                Bundle bundle = new Bundle();
-                bundle.putString(DetailFragment.DETAIL_MOVIE_ID, "0");
-
-                DetailFragment fragment = new DetailFragment();
-                fragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.detail_fragment_container, new DetailFragment(), DETAILFRAGMENT_TAG)
                         .commit();
@@ -119,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements Callback {
     /**
      * This is Callback interface interface method which helps to communicate between two different fragments by passing
      * movieId values.
-     *
      * @param movieId
      */
     @Override
