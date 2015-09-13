@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 
 
 import com.udacity.movietimes.R;
+import com.udacity.movietimes.fragments.DetailFragment;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -34,6 +35,12 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.detail_fragment_container, new DetailFragment())
+                    .commit();
+        }
 
         /** Setup Toolbar as an AppBar */
         mToolBar = (Toolbar) findViewById(R.id.tool_bar);
