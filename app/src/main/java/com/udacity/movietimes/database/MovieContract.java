@@ -21,7 +21,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * This is contract class for movie database having table and column names. This class will be use by DbHelper class to
+ * This is a Contract class for movie database having table and column names. This class will be use by DbHelper class to
  * interact with the SQLite database.
  * Tables : Movie, Trailer, Review
  * Created by ramakant on 9/6/2015.

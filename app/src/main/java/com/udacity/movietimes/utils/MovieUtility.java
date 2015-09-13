@@ -27,8 +27,11 @@ import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.model.Reviews;
 import com.udacity.movietimes.model.Trailer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.prefs.PreferenceChangeEvent;
 
@@ -58,7 +61,7 @@ public class MovieUtility {
     public static final int COL_RATING = 5;
     public static final int COL_OVERVIEW = 6;
 
-
+    // To do bulk insert into Movie Table
     public static void storeMovies(Context context, List<Movie> movies, String sortOrder) {
 
         List<ContentValues> contentValues = new ArrayList<ContentValues>(movies.size());
@@ -91,6 +94,7 @@ public class MovieUtility {
         }
     }
 
+    // To do bulk insert into Trailer table
     public static void storeTrailers(Context context, String movieId, List<Trailer.MovieTrailer> trailerList) {
         List<ContentValues> contentValues = new ArrayList<ContentValues>(trailerList.size());
         for (int i = 0; i < trailerList.size(); i++) {
@@ -101,10 +105,10 @@ public class MovieUtility {
             values.put(MovieContract.TrailerEntry.COLUMN_TRAILER_KEY, trailer.getKey());
             contentValues.add(values);
             int rowCount = context.getContentResolver().bulkInsert(MovieContract.TrailerEntry.CONTENT_URI, contentValues.toArray(new ContentValues[contentValues.size()]));
-            Log.d("BINODANI", movieId + " - " + rowCount);
         }
     }
 
+    // To do bulk insert into Review table
     public static void storeReviews(Context context, String movieId, List<Reviews.Review> reviewList) {
         List<ContentValues> contentValues = new ArrayList<ContentValues>(reviewList.size());
         for (int i = 0; i < reviewList.size(); i++) {
@@ -119,4 +123,21 @@ public class MovieUtility {
             context.getContentResolver().bulkInsert(MovieContract.ReviewEntry.CONTENT_URI, contentValues.toArray(new ContentValues[contentValues.size()]));
         }
     }
+
+    // Date Formatter
+    public static String formatDate(String date){
+
+        SimpleDateFormat mInputFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat mOutputFormat = new SimpleDateFormat("MMM yyyy");
+        try {
+            Date mDate = mInputFormat.parse(date);
+            String formatDate = mOutputFormat.format(mDate);
+            return  formatDate;
+
+        } catch (ParseException e) {
+            return  null;
+        }
+    }
+
+
 }

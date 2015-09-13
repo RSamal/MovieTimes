@@ -45,7 +45,9 @@ import retrofit.client.Response;
 
 
 public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
-    public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
+
+    public static final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
+
     // Interval at which to sync with the weather, in milliseconds.
     // 60 seconds (1 minute) * 180 = 3 hours
     public static final int SYNC_INTERVAL = 60 * 180;
@@ -61,7 +63,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         final MovieApiEndPoint apiService = restAdapter.create(MovieApiEndPoint.class);
         final MovieApiEndPoint simpleService = restAdapter.create(MovieApiEndPoint.class);
 
-        // Fetch the High rated movie record from MovieDb Api and load them to all the tables
+        // Fetch the High rated movie record from MovieDb Api and load them to all the tables. It does the nested REST call through Retrofit Framework
         final String highRate = getContext().getResources().getString(R.string.sort_votes);
 
         apiService.getTopMovies(highRate, new Callback<Movies>() {
@@ -73,26 +75,17 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 for (final Movie movie : movieList) {
 
-                    Log.d(LOG_TAG, "High Movie Id: " + movie.getmId());
 
                     apiService.getMovieTrailers(movie.getmId(), new Callback<Trailer>() {
                                 @Override
                                 public void success(Trailer trailer, Response response) {
                                     MovieUtility.storeTrailers(getContext(), movie.getmId(), trailer.getTrailerList());
 
-                                    for (int i = 0; i < trailer.getTrailerList().size(); i++) {
-
-                                        Log.d(LOG_TAG, "High Movie Id: " + trailer.getTrailerList().get(i).getKey() + movie.getmId());
-                                    }
-
-                                    if (trailer.getTrailerList().size() == 0) {
-                                        Log.d(LOG_TAG, movie.getmId() + "No Trailer Found");
-                                    }
                                 }
 
                                 @Override
                                 public void failure(RetrofitError error) {
-                                    Log.d(LOG_TAG, movie.getmId() + "Error loading trailer");
+
                                 }
                             }
 

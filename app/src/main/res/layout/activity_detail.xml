@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.udacity.movietimes.activities.DetailActivity">
 
-
-
+    <!-- Dynamic Container for our detail activity or fragment-->
     <FrameLayout
         android:id="@+id/detail_fragment_container"
         android:layout_width="match_parent"

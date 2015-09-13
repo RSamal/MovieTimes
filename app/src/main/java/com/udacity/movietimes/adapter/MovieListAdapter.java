@@ -39,20 +39,18 @@ import com.udacity.movietimes.utils.MovieUtility;
 /**
  * Created by ramakantasamal on 8/24/15.
  * <p/>
- * This is a RecyclerViewAdapter class which will be responsible for creating movie list at runtime. It gets the data comes back from MovieDB API
- * and uses recyclerview and cardview to list the popular and highest rated movie.
+ * This is a CursorAdapter class which will be responsible for creating movie list at runtime. It reads the Data from Movie table and populates the
+ * correct view with the Cursor data.
  */
 public class MovieListAdapter extends CursorAdapter {
 
     //Log TAG for this class
-    private static final String TAG = MovieListAdapter.class.getSimpleName();
-
+    private static final String LOG_TAG = MovieListAdapter.class.getSimpleName();
 
 
     public MovieListAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, flags);
     }
-
 
 
     @Override
@@ -90,7 +88,6 @@ public class MovieListAdapter extends CursorAdapter {
         stars.getDrawable(0).setColorFilter(backGround,PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1).setColorFilter(backGround,PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(2).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-
 
         /**Setting the Pallete color of card view . As the Pallete color does not work , hence using dynamic color generation routine*/
         holder.cardView.setCardBackgroundColor(backGround);

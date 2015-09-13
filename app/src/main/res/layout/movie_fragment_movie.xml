@@ -36,8 +36,8 @@
 
         <TextView
             android:id="@+id/movie_fragment_movie_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignBaseline="@+id/movie_fragment_movie_title"
             android:layout_alignBottom="@+id/movie_fragment_movie_title"
             android:textColor="@color/favorite"

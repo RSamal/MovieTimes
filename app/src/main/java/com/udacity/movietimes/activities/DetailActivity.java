@@ -1,4 +1,3 @@
-package com.udacity.movietimes.activities;
 /*
  * Copyright (C) 2013 The Android Open Source Project
  *
@@ -14,6 +13,8 @@ package com.udacity.movietimes.activities;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.udacity.movietimes.activities;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -21,14 +22,16 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 
-
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.fragments.DetailFragment;
 
+/**
+ * This class is responsible for showing the details about a movie got selected from the List. This invokes a dynamic detailFragment
+ * to full the purpose
+ */
 public class DetailActivity extends AppCompatActivity {
 
-    private static final String TAG = DetailActivity.class.getSimpleName();
-
+    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     private Toolbar mToolBar;
 
@@ -37,6 +40,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        // Check if we already have the data from the savedInstance state in case of screen rotation.
+        //  If its null call then only fetch the data from the intent passed from  through MainActivity and Fragment
         if (savedInstanceState == null) {
 
             Bundle bundle = new Bundle();
@@ -45,8 +50,7 @@ public class DetailActivity extends AppCompatActivity {
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(bundle);
 
-
-
+            // Inflate the dynamic DetailFragment through FragmentManager
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.detail_fragment_container, fragment)
                     .commit();
@@ -62,6 +66,5 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
 
 }

@@ -16,21 +16,14 @@
 package com.udacity.movietimes.fragments;
 
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,7 +31,6 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 
 import com.udacity.movietimes.R;
-import com.udacity.movietimes.activities.DetailActivity;
 import com.udacity.movietimes.adapter.MovieListAdapter;
 import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.model.Movie;
@@ -69,9 +61,6 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
         // Required empty public constructor
     }
 
-    public void setMovieList(List<Movie> movieList) {
-        this.movieList = movieList;
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -106,14 +95,8 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
                 }
             }
         });
-
-
         return view;
-
     }
-
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -121,7 +104,6 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
         getLoaderManager().initLoader(HIGH_RATE_MOVIE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {

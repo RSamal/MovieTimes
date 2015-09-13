@@ -8,24 +8,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:src="@drawable/reviewer"/>
+            android:src="@drawable/reviewer" />
 
         <TextView
             android:id="@+id/movie_fragment_review_Author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="8dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="2dp"
             android:fontFamily="sans-serif-medium"
             android:textAppearance="@android:style/TextAppearance.Material.Body1"
             android:textColor="@color/primaryTextColor" />
@@ -35,8 +35,8 @@
         android:id="@+id/movie_fragment_review_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:layout_marginLeft="72dp"
+        android:layout_marginTop="2dp"
         android:fontFamily="sans-serif-light"
         android:textAppearance="@android:style/TextAppearance.Material.Widget.TextView"
         android:textStyle="normal" />

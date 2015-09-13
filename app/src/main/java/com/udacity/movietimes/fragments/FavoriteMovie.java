@@ -15,18 +15,13 @@
  */
 package com.udacity.movietimes.fragments;
 
-
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,11 +31,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.udacity.movietimes.R;
-import com.udacity.movietimes.activities.DetailActivity;
 import com.udacity.movietimes.adapter.MovieListAdapter;
 import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.model.Movie;
@@ -66,7 +59,6 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
     private GridView mGridView;
     private MovieListAdapter mMovieListAdapter;
     private List<Movie> movieList;
-    private TextView favorite;
     private ProgressBar progressBar;
 
 
@@ -74,9 +66,6 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
         // Required empty public constructor
     }
 
-    public void setMovieList(List<Movie> movieList) {
-        this.movieList = movieList;
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -116,13 +105,10 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        // TODO : Remove this below Toast line
-        Toast.makeText(getActivity().getApplicationContext(),"You are in Favorite movie",Toast.LENGTH_LONG).show();
         mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
         mGridView.setAdapter(mMovieListAdapter);
 
-
-
+        // Call the Callback listner method of the activity and pass the required message up to the activity
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -130,7 +116,6 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
                 if (cursor != null) {
                     String movieId = cursor.getString(MovieUtility.COL_MOVIE_ID);
                     ((Callback) getActivity()).onItemSelected(movieId);
-
 
                 }
             }
@@ -156,6 +141,7 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
+        // Fetch all the Movie has the Favorite Column value as Y. Which shows all the movie got added to the databases as Favorite
         String[] selectionArgs = {"Y"};
 
         return new CursorLoader(getActivity(),

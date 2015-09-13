@@ -28,19 +28,17 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieDetailAdapter;
 import com.udacity.movietimes.database.MovieContract;
-import com.udacity.movietimes.utils.MovieUtility;
 
 
 /**
- * This Frafment will be responsible to deispla the details about a Movie , which includes Trailer, Movie Detail and User reviews.
+ * This Frafment will be responsible to deisplay the details about a Movie , which includes Trailer, Movie Detail and User reviews.
  * A simple {@link Fragment} subclass.
  */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -71,8 +69,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        // TODO : Remove this below toast line
-        Toast.makeText(getActivity().getApplicationContext(), "You are in detail Fragment", Toast.LENGTH_LONG).show();
 
         movieId = getActivity().getIntent().getStringExtra(Intent.EXTRA_STREAM);
 
@@ -84,11 +80,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         return view;
     }
 
-    public void doProcessFavorite(View view) {
-
-        favorite = (TextView) view;
-        favorite.setText("\uf14a");
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

@@ -16,24 +16,18 @@
 package com.udacity.movietimes.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieSelectAdapter;
-import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.fragments.Callback;
 import com.udacity.movietimes.fragments.DetailFragment;
-import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.sync.MovieSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements Callback {
@@ -55,23 +49,22 @@ public class MainActivity extends AppCompatActivity implements Callback {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
+        // If the user wantes ever to refresh data manually, this option will help
         if (id == R.id.action_refresh) {
             updateMovie();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This function get called if the user click refresh button manually. This will help immidiate sync of data
+     * with the server
+     */
     public void updateMovie() {
         MovieSyncAdapter.syncImmediately(getApplicationContext());
     }
@@ -85,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements Callback {
         //Initialize the MovieSyncAdapter
         MovieSyncAdapter.initializeSyncAdapter(this);
 
+        //This conditon checks if we are in Bigger Layout like Tablet or not. If yes then inflate the fragment to the Tablet specific
+        //layout other wise go with the detail activity fragment
         if (findViewById(R.id.detail_fragment_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
@@ -111,30 +106,15 @@ public class MainActivity extends AppCompatActivity implements Callback {
 
         /** Implement Tab Listner for page selection */
 
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-
     }
 
 
+    /**
+     * This is Callback interface interface method which helps to communicate between two different fragments by passing
+     * movieId values.
+     *
+     * @param movieId
+     */
     @Override
     public void onItemSelected(String movieId) {
         if (mTwoPane) {

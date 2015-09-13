@@ -16,17 +16,13 @@
 package com.udacity.movietimes.fragments;
 
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +35,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.udacity.movietimes.R;
-import com.udacity.movietimes.activities.DetailActivity;
 import com.udacity.movietimes.adapter.MovieListAdapter;
 import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.model.Movie;
@@ -64,23 +59,19 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
 
     private GridView mGridView;
     private MovieListAdapter mMovieListAdapter;
-    private List<Movie> movieList;
-    private TextView favorite;
+    private List<Movie> mMovieList;
     private ProgressBar progressBar;
 
     public PopularMovie() {
         // Required empty public constructor
     }
 
-    public void setMovieList(List<Movie> movieList) {
-        this.movieList = movieList;
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (movieList != null) {
-            outState.putParcelableArrayList("KEY", (ArrayList<? extends Parcelable>) movieList);
+        if (mMovieList != null) {
+            outState.putParcelableArrayList("KEY", (ArrayList<? extends Parcelable>) mMovieList);
         }
     }
 
@@ -151,7 +142,7 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-
+        // To select the data from the Movie table where the Popular cloumn has the value Y
         String[] selectionArgs = {"Y"};
 
         return new CursorLoader(getActivity(),

@@ -25,12 +25,7 @@ public abstract class MovieUrl {
     /**
      * Below Parameter is to fetch the movie details
      */
-//    public static final String BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
     public static final String BASE_URL = "http://api.themoviedb.org/3";
-    public static final String SORT_BY_PARM = "sort_by";
-    public static final String API_KEY_PARM = "api_key";
-    public static final String CERT_COUNTRY_PARM = "certification_country";
-    public static final String CERT_PARM = "certification";
 
 
     /** Below is for to fetch the Image of a movie */

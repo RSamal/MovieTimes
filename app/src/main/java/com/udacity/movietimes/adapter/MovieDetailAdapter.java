@@ -15,18 +15,17 @@ package com.udacity.movietimes.adapter;
  * limitations under the License.
  */
 
+
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.widget.CursorAdapter;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,17 +33,33 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.database.MovieContract;
-import com.udacity.movietimes.model.Movie;
+import com.udacity.movietimes.utils.MovieConfig;
 import com.udacity.movietimes.utils.MovieUrl;
+import com.udacity.movietimes.utils.MovieUtility;
 
 /**
- * This Adapter will be used to display the Movie details returned from JOIN operation of Movie, Trailer and Review
+ * This Adapter will be used to display the Movie details returned from MergerCursor which has the data  Trailer, Movie and Review tables.
+ * This reads out the specific rows of the Cursor and inflate three different layout based on the view position.
+ * Input to fetch the the MergeCursor data is the movieId passed from the MainActivity/Fragment through the list Item selection.
+ * <p/>
+ * All the views of detail fragmemt reside in ListView , hence the entire screen can be Scrollable. And we are using CursorAdapter to inflate different view and
+ * populate with the right data.
+ * <p/>
+ * Cursor position 0 : Has the data from Trailer tables. It inflates the movie_fragment_trailer layout and populates the respective value.
+ * If trailer is not present in the Trailer table for a specific movie , The corresponding Cursor insert null values for it, so that the view
+ * does not brake. And while setting the adapter validate the null values and set appropriate message for the view.
+ * <p/>
+ * Cursor position 1 : Has the data from Movie tables. It inflates the movie_fragment_movie layout and populates the respective value.
+ * <p/>
+ * Cursor position 2 : Has the data from Review tables. It inflates the movie_fragment_review layout and populates the respective value.
+ * <p/>
  * Created by ramakant on 9/11/2015.
  */
 public class MovieDetailAdapter extends CursorAdapter {
@@ -54,7 +69,6 @@ public class MovieDetailAdapter extends CursorAdapter {
     private static final int VIEW_TYPE_MOVIE_TRAILER = 0;
     private static final int VIEW_TYPE_MOVIE_BODY = 1;
     private static final int VIEW_TYPE_MOVIE_REVIEW = 2;
-    protected ListView mListView;
 
     // This CursorAdapter will handle view from Three deifferent table i.e Movie, Trailer and Review.
     // The Cursor to this adapter is a MergeCursor and got the reesult merged from the above mentiond table as mentioned in the below sequence of the Column Index. Any changes in the
@@ -80,10 +94,11 @@ public class MovieDetailAdapter extends CursorAdapter {
      */
     public static final int COL_AUTHOR_NAME = 1;
     public static final int COL_REVIEW_CONTENT = 2;
-
+    Activity activity;
 
     public MovieDetailAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+        activity = (Activity) context;
 
     }
 
@@ -148,10 +163,15 @@ public class MovieDetailAdapter extends CursorAdapter {
                 viewHolder.title.setText(cursor.getString(COL_TITLE));
 
                 // Set the favorite button ON/OFF
-                updateFavoriteButton(viewHolder,context,cursor);
+                updateFavoriteButton(viewHolder, context, cursor);
 
 
                 // Set the Release date of the movie
+                String date = MovieUtility.formatDate(cursor.getString(COL_RELEASE_DATE));
+                if(date!= null){
+                    viewHolder.releaseDate.setText(date);
+                }
+
 
                 // Set the Rating of the Movie
                 viewHolder.rating.setRating((float) (Float.valueOf(cursor.getString(COL_RATING)) / 2.0));
@@ -171,17 +191,37 @@ public class MovieDetailAdapter extends CursorAdapter {
                 final TrailerVeiwHolder viewHolder = (TrailerVeiwHolder) view.getTag();
 
                 // Set the Trailer Image
+                final String trailerKey = cursor.getString(COL_TRAILER_KEY);
                 Uri.Builder mVedioUrl = Uri.parse(MovieUrl.MOVIE_VEDIO_BASE_URL).buildUpon()
-                        .appendPath(cursor.getString(COL_TRAILER_KEY))
+                        .appendPath(trailerKey)
                         .appendPath(MovieUrl.VEDIO_TN_SIZE);
 
                 Picasso.with(mContext).load(mVedioUrl.toString()).into(viewHolder.trailerPic, new Callback.EmptyCallback() {
+
+                    @Override
+                    public void onSuccess() {
+                        viewHolder.trailerPic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(activity, MovieConfig.GOOGLE_API_KEY, trailerKey);
+                                    context.startActivity(intent);
+                                } catch (ActivityNotFoundException e) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailerKey));
+                                    context.startActivity(intent);
+                                }
+                            }
+                        });
+                    }
+
                     @Override
                     public void onError() {
                         super.onError();
                         viewHolder.trailerMsg.setText(R.string.noTrailer);
                     }
                 });
+
+
 
                 break;
             }
@@ -208,14 +248,13 @@ public class MovieDetailAdapter extends CursorAdapter {
     }
 
 
-
     @Override
     public int getViewTypeCount() {
         return VIEW_TYPE_COUNT;
     }
 
 
-    public void updateFavoriteButton(final MovieViewHolder viewHolder, final Context context, final Cursor cursor){
+    public void updateFavoriteButton(final MovieViewHolder viewHolder, final Context context, final Cursor cursor) {
         // set the favorite button of the movie. First we check in the database if the favorite column
         // is Y or N. Based on that we switch the indicator as well as update the data in Movie DB.
         // Its basically act like a switch to update favorite column in the Movie Table
@@ -228,9 +267,9 @@ public class MovieDetailAdapter extends CursorAdapter {
         Typeface fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome.ttf");
         viewHolder.favorite.setTypeface(fontFamily);
 
-        if(values.get(MovieContract.MovieEntry.COLUMN_FAVORITE).equals("N")){
+        if (values.get(MovieContract.MovieEntry.COLUMN_FAVORITE).equals("N")) {
             viewHolder.favorite.setText("\uf196");
-        }else {
+        } else {
             viewHolder.favorite.setText("\uf14a");
         }
 
@@ -239,7 +278,7 @@ public class MovieDetailAdapter extends CursorAdapter {
             public void onClick(View v) {
 
                 String movieId = (String) values.get(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
-                if(values.get(MovieContract.MovieEntry.COLUMN_FAVORITE).equals("N")){
+                if (values.get(MovieContract.MovieEntry.COLUMN_FAVORITE).equals("N")) {
                     values.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "Y");
                     viewHolder.favorite.setText("\uf14a");
 
@@ -256,7 +295,7 @@ public class MovieDetailAdapter extends CursorAdapter {
 
     }
 
-    // This is Markup interface for Movie Data structures
+    // This is Markup interface for Movie , Trailer and Review ViewHolder
     public interface ViewHolder {
     }
 
@@ -307,6 +346,5 @@ public class MovieDetailAdapter extends CursorAdapter {
             trailerMsg = (TextView) view.findViewById(R.id.movie_fragment_trailer_vedio_msg);
         }
     }
-
 
 }
