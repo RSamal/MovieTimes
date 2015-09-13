@@ -29,11 +29,11 @@ public abstract class MovieConfig {
     /**
      *  MovieDB API key. Please replace with yours
      */
-    public static final String MOVIEDB_API_KEY = "705638ddd2ae94080ffe2f5048cd682a";
+    public static final String MOVIEDB_API_KEY = "XXXX";
 
     /**
      * Google Developer API Key. Please replace with yours to get access to Youtube
      */
-    public static final String GOOGLE_API_KEY = "AIzaSyDYA5kvFYOnznjuTxsC8btURc4Y90IQ_iE";
+    public static final String GOOGLE_API_KEY = "XXX";
 
 }
