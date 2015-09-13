@@ -15,6 +15,8 @@
  */
 package com.udacity.movietimes.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
@@ -28,11 +30,16 @@ import android.view.MenuItem;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieSelectAdapter;
+import com.udacity.movietimes.database.MovieContract;
+import com.udacity.movietimes.fragments.Callback;
 import com.udacity.movietimes.fragments.DetailFragment;
 import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.sync.MovieSyncAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Callback {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     private Toolbar mToolBar;
     private ViewPager mViewPager;
@@ -65,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateMovie(){
+    public void updateMovie() {
         MovieSyncAdapter.syncImmediately(getApplicationContext());
     }
 
@@ -78,16 +85,14 @@ public class MainActivity extends AppCompatActivity {
         //Initialize the MovieSyncAdapter
         MovieSyncAdapter.initializeSyncAdapter(this);
 
-        if(findViewById(R.id.detail_fragment_container) != null){
+        if (findViewById(R.id.detail_fragment_container) != null) {
             mTwoPane = true;
-            if (savedInstanceState == null){
+            if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.detail_fragment_container, new DetailFragment())
+                        .replace(R.id.detail_fragment_container, new DetailFragment(), DETAILFRAGMENT_TAG)
                         .commit();
             }
-        }
-        else
-        {
+        } else {
             mTwoPane = false;
         }
 
@@ -127,8 +132,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
     }
 
 
+    @Override
+    public void onItemSelected(String movieId) {
+        if (mTwoPane) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString(DetailFragment.DETAIL_MOVIE_ID, movieId);
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(Intent.EXTRA_STREAM, movieId);
+            startActivity(intent);
+        }
+    }
 }

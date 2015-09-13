@@ -14,6 +14,7 @@ package com.udacity.movietimes.activities;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,8 +38,17 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         if (savedInstanceState == null) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString(DetailFragment.DETAIL_MOVIE_ID, getIntent().getStringExtra(Intent.EXTRA_STREAM));
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(bundle);
+
+
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_fragment_container, new DetailFragment())
+                    .add(R.id.detail_fragment_container, fragment)
                     .commit();
         }
 

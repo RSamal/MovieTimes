@@ -46,6 +46,7 @@ import com.udacity.movietimes.utils.MovieUtility;
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+    public static final String DETAIL_MOVIE_ID = "movieId";
 
     private static final String FORECAST_SHARE_HASHTAG = " #MovieTimesApp";
     private static final int DETAIL_LOADER = 0;
@@ -63,10 +64,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            movieId = arguments.getString(DetailFragment.DETAIL_MOVIE_ID);
+        }
+
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         // TODO : Remove this below toast line
-        Toast.makeText(getActivity().getApplicationContext(),"You are in detail Fragment",Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity().getApplicationContext(), "You are in detail Fragment", Toast.LENGTH_LONG).show();
 
         movieId = getActivity().getIntent().getStringExtra(Intent.EXTRA_STREAM);
 
@@ -78,7 +84,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         return view;
     }
 
-    public void doProcessFavorite(View view){
+    public void doProcessFavorite(View view) {
 
         favorite = (TextView) view;
         favorite.setText("\uf14a");
@@ -93,14 +99,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (movieId != null) {
+            Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf(movieId));
+            return new CursorLoader(getActivity(),
+                    movieDetailUri,
+                    null,
+                    null,
+                    null,
+                    null);
 
-        Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf(movieId));
-        return new CursorLoader(getActivity(),
-                movieDetailUri,
-                null,
-                null,
-                null,
-                null);
+        }
+        return null;
     }
 
     @Override
