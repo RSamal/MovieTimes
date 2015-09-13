@@ -37,6 +37,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.activities.DetailActivity;
@@ -115,6 +116,8 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         progressBar.setVisibility(View.INVISIBLE);
 
+        // TODO : Remove this below Toast line
+        Toast.makeText(getActivity().getApplicationContext(),"You are in Favorite movie",Toast.LENGTH_LONG).show();
         mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
         mGridView.setAdapter(mMovieListAdapter);
 

@@ -1,27 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    tools:mContext="com.udacity.movietimes.activities.MainActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp">
+
+        <!-- Include the Toolbar as an AppBar -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+            <!--app:layout_scrollFlags="scroll|enterAlways">-->
+        </android.support.v7.widget.Toolbar>
+
+        <!-- Adding a Tablayout for Popular and Highest Rate movie Selector -->
+        <android.support.design.widget.TabLayout
+            android:id="@+id/sliding_tab"
+            style="@style/MovieTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@android:color/white" />
+    </android.support.design.widget.AppBarLayout>
 
     <!--
    This layout is a two-pane layout for the Items master/detail flow.
    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <!-- Adding a view Pager for Tab navigation -->
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        <!-- Adding a view Pager for Tab navigation -->
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <fragment
-        android:id="@+id/detail_fragment_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4" />
+        <FrameLayout
+            android:id="@+id/detail_fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4" />
+    </LinearLayout>
 
 </LinearLayout>

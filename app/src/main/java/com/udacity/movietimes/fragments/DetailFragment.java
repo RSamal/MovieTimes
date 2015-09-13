@@ -31,6 +31,7 @@ import android.support.v4.content.Loader;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieDetailAdapter;
@@ -63,6 +64,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        // TODO : Remove this below toast line
+        Toast.makeText(getActivity().getApplicationContext(),"You are in detail Fragment",Toast.LENGTH_LONG).show();
 
         movieId = getActivity().getIntent().getStringExtra(Intent.EXTRA_STREAM);
 
