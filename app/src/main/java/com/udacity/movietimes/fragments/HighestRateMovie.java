@@ -94,7 +94,10 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
 
                 }
             }
+
         });
+
+
         return view;
     }
 

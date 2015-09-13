@@ -63,7 +63,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            Log.d(LOG_TAG, arguments.getString(DetailFragment.DETAIL_MOVIE_ID));
             movieId = arguments.getString(DetailFragment.DETAIL_MOVIE_ID);
         }
 
