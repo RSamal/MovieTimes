@@ -19,7 +19,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-
+import android.util.Log;
 
 
 import com.udacity.movietimes.R;
@@ -27,7 +27,7 @@ import com.udacity.movietimes.fragments.DetailFragment;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private static final String TAG = DetailActivity.class.getSimpleName();
+    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
 
     private Toolbar mToolBar;
@@ -41,6 +41,8 @@ public class DetailActivity extends AppCompatActivity {
 
             Bundle bundle = new Bundle();
             bundle.putString(DetailFragment.DETAIL_MOVIE_ID, getIntent().getStringExtra(Intent.EXTRA_STREAM));
+
+            Log.d(LOG_TAG,getIntent().getStringExtra(Intent.EXTRA_STREAM));
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(bundle);

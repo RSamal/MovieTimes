@@ -66,15 +66,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
         if (arguments != null) {
+            Log.d(LOG_TAG,arguments.getString(DetailFragment.DETAIL_MOVIE_ID));
             movieId = arguments.getString(DetailFragment.DETAIL_MOVIE_ID);
         }
 
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        // TODO : Remove this below toast line
-        Toast.makeText(getActivity().getApplicationContext(), "You are in detail Fragment", Toast.LENGTH_LONG).show();
 
-        movieId = getActivity().getIntent().getStringExtra(Intent.EXTRA_STREAM);
 
         movieDetailAdapter = new MovieDetailAdapter(getActivity(), null, 0);
 
@@ -99,17 +97,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (movieId != null) {
-            Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf(movieId));
-            return new CursorLoader(getActivity(),
-                    movieDetailUri,
-                    null,
-                    null,
-                    null,
-                    null);
-
-        }
+            if (movieId != null) {
+                Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf(movieId));
+                return new CursorLoader(getActivity(),
+                        movieDetailUri,
+                        null,
+                        null,
+                        null,
+                        null);
+            }
         return null;
+
     }
 
     @Override
