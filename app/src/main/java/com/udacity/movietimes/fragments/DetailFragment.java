@@ -43,9 +43,8 @@ import com.udacity.movietimes.database.MovieContract;
  */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     public static final String DETAIL_MOVIE_ID = "movieId";
-
+    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String FORECAST_SHARE_HASHTAG = " #MovieTimesApp";
     private static final int DETAIL_LOADER = 0;
     private MovieDetailAdapter movieDetailAdapter;
@@ -64,7 +63,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            Log.d(LOG_TAG,arguments.getString(DetailFragment.DETAIL_MOVIE_ID));
+            Log.d(LOG_TAG, arguments.getString(DetailFragment.DETAIL_MOVIE_ID));
             movieId = arguments.getString(DetailFragment.DETAIL_MOVIE_ID);
         }
 
@@ -90,15 +89,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            if (movieId != null) {
-                Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf(movieId));
-                return new CursorLoader(getActivity(),
-                        movieDetailUri,
-                        null,
-                        null,
-                        null,
-                        null);
-            }
+        if (movieId != null) {
+            Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf(movieId));
+            return new CursorLoader(getActivity(),
+                    movieDetailUri,
+                    null,
+                    null,
+                    null,
+                    null);
+        }
         return null;
 
     }
