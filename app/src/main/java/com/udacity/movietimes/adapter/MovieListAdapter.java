@@ -47,6 +47,8 @@ public class MovieListAdapter extends CursorAdapter {
     //Log TAG for this class
     private static final String TAG = MovieListAdapter.class.getSimpleName();
 
+
+
     public MovieListAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, flags);
     }

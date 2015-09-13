@@ -1,27 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/movie_fragment_review"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/movie_fragment_review_Author"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="sans-serif-medium"
-        android:textAppearance="@android:style/TextAppearance.Material.Body2"
-        android:textColor="@color/primaryTextColor" />
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/reviewer"/>
+
+        <TextView
+            android:id="@+id/movie_fragment_review_Author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            android:textColor="@color/primaryTextColor" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/movie_fragment_review_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:fontFamily="sans-serif-medium"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1"
-        android:textColor="@color/primaryTextColor" />
+        android:layout_marginLeft="72dp"
+        android:fontFamily="sans-serif-light"
+        android:textAppearance="@android:style/TextAppearance.Material.Widget.TextView"
+        android:textStyle="normal" />
 
 </LinearLayout>

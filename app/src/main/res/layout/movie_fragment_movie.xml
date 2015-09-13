@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/movie_fragment_movie"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <!-- Include the Movie content details -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/movie_fragment_movie_poster"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitStart"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/movie_fragment_movie_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/movie_fragment_movie_poster"
+            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@android:style/TextAppearance.Material.WindowTitle"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="normal"/>
+
+        <TextView
+            android:id="@+id/movie_fragment_movie_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/movie_fragment_movie_title"
+            android:layout_alignBottom="@+id/movie_fragment_movie_title"
+            android:textColor="@color/favorite"
+            android:onClick="doProcessFavorite"
+            android:textSize="28sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:id="@+id/movie_fragment_movie_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_fragment_movie_title"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/movie_fragment_movie_poster"
+            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@android:style/TextAppearance.Material.Body2"
+            android:textColor="@color/primaryTextColor" />
+
+        <View
+            android:id="@+id/movie_fragment_movie_separatorOne"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/movie_fragment_movie_poster"
+            android:layout_marginTop="10dp"
+            android:background="@color/divider" />
+
+        <RatingBar
+            android:id="@+id/movie_fragment_movie_rating"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_fragment_movie_separatorOne"
+            android:layout_marginTop="10dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="0.1" />
+
+        <View
+            android:id="@+id/movie_fragment_movie_separatorTwo"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/movie_fragment_movie_rating"
+            android:layout_marginTop="10dp"
+            android:background="@color/divider" />
+
+        <TextView
+            android:id="@+id/movie_fragment_movie_overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_fragment_movie_separatorTwo"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-light"
+            android:textAppearance="@android:style/TextAppearance.Material.Widget.TextView"
+            android:textStyle="normal"/>
+    </RelativeLayout>
+
+</LinearLayout>

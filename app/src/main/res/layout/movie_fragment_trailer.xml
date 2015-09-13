@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/movie_fragment_trailer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Include the youtube thumbnail for Trailer of the movie -->
+    <RelativeLayout
+        android:id="@+id/movie_fragment_trailer_vedio"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp">
+
+        <!-- ImageView or your Thumbnail -->
+        <ImageView
+            android:id="@+id/movie_fragment_trailer_vedio_img"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY" />
+
+        <!-- ImageView of your button -->
+        <ImageView
+            android:id="@+id/movie_fragment_trailer_vedio_play"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/play" />
+
+        <!-- TextView to display no trailer Msg -->
+        <TextView
+            android:id="@+id/movie_fragment_trailer_vedio_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_fragment_trailer_vedio_play"
+            android:layout_centerInParent="true"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</LinearLayout>

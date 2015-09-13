@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.udacity.movietimes.sync;
 
 import android.accounts.Account;
@@ -42,13 +57,12 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d("TEST","Calling Sync Adapter");
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(MovieUrl.BASE_URL).build();
         final MovieApiEndPoint apiService = restAdapter.create(MovieApiEndPoint.class);
         final MovieApiEndPoint simpleService = restAdapter.create(MovieApiEndPoint.class);
 
         // Fetch the High rated movie record from MovieDb Api and load them to all the tables
-        final String highRate = getContext().getResources().getString(R.string.api_sort_votes);
+        final String highRate = getContext().getResources().getString(R.string.sort_votes);
 
         apiService.getTopMovies(highRate, new Callback<Movies>() {
             @Override
@@ -59,30 +73,43 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 for (final Movie movie : movieList) {
 
-                    Log.d("HIGHRATE",movie.getmTitle());
+                    Log.d(LOG_TAG, "Movie Id: " + movie.getmId());
+
                     apiService.getMovieTrailers(movie.getmId(), new Callback<Trailer>() {
-                        @Override
-                        public void success(Trailer trailer, Response response) {
-                            MovieUtility.storeTrailers(getContext(), movie.getmId(), trailer.getTrailerList());
+                                @Override
+                                public void success(Trailer trailer, Response response) {
+                                    MovieUtility.storeTrailers(getContext(), movie.getmId(), trailer.getTrailerList());
 
-                        }
+                                }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                        }
-                    });
+                                @Override
+                                public void failure(RetrofitError error) {
 
-                    apiService.getMovieReviews(movie.getmId(), new Callback<Reviews>() {
-                        @Override
-                        public void success(Reviews reviews, Response response) {
-                            MovieUtility.storeReviews(getContext(), movie.getmId(), reviews.getReviewList());
-                        }
+                                }
+                            }
 
-                        @Override
-                        public void failure(RetrofitError error) {
+                    );
 
-                        }
-                    });
+                    try {
+                        Thread.currentThread().sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    apiService.getMovieReviews(movie.getmId(), new Callback<Reviews>()
+
+                            {
+                                @Override
+                                public void success(Reviews reviews, Response response) {
+                                    MovieUtility.storeReviews(getContext(), movie.getmId(), reviews.getReviewList());
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                }
+                            }
+
+                    );
                 }
 
             }
@@ -94,7 +121,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         });
 
         // Fetch the popular movie record from MovieDb Api and load them to all the tables
-        final String popular = getContext().getResources().getString(R.string.api_sort_popularity);
+        final String popular = getContext().getResources().getString(R.string.sort_popularity);
 
         simpleService.getTopMovies(popular, new Callback<Movies>() {
 
@@ -103,10 +130,10 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 List<Movie> movieList = movies.getMovieList();
                 MovieUtility.storeMovies(getContext(), movieList, popular);
-               ;
+                ;
                 for (final Movie movie : movieList) {
 
-                    Log.d("POPULARITY",movie.getmTitle());
+
                     apiService.getMovieTrailers(movie.getmId(), new Callback<Trailer>() {
                         @Override
                         public void success(Trailer trailer, Response response) {

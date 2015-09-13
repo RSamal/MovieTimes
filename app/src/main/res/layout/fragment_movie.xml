@@ -2,22 +2,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:padding="3dp"
     tools:mContext="com.udacity.movietimes.fragments.PopularMovie">
 
 
-    <!-- A RecyclerView with some commonly used attributes -->
-    <GridView
-        android:id="@+id/movie_fragment_gridview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:columnWidth="130dp"
-        android:horizontalSpacing="3dp"
-        android:verticalSpacing="3dp"
-        android:layout_marginTop="5dp"
-        />
+
+        <!-- A RecyclerView with some commonly used attributes -->
+        <GridView
+            android:id="@+id/movie_fragment_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:columnWidth="130dp"
+            android:horizontalSpacing="3dp"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="3dp" />
 
 </FrameLayout>

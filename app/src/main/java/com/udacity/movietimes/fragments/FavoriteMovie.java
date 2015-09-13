@@ -158,7 +158,6 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.d("LOOOO", Integer.toString(cursor.getCount()));
         mMovieListAdapter.swapCursor(cursor);
     }
 

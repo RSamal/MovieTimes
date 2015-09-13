@@ -21,12 +21,14 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.database.MergeCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-import com.udacity.movietimes.database.MovieContract.MovieEntry;
+import com.udacity.movietimes.database.MovieContract.*;
 import com.udacity.movietimes.model.Movie;
 
 
@@ -63,24 +65,39 @@ public class MovieProvider extends ContentProvider {
     private static SQLiteQueryBuilder selectReview = null;
 
     private static final String[] MOVIE_COLUMNS = {
-            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+            MovieContract.MovieEntry._ID,
+//            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
             MovieContract.MovieEntry.COLUMN_TITLE,
+            MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
             MovieContract.MovieEntry.COLUMN_POSTER_PATH,
             MovieContract.MovieEntry.COLUMN_RATING,
-            MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
             MovieContract.MovieEntry.COLUMN_OVERVIEW
     };
 
 
     private static final String[] TRAILER_COLUMNS = {
-            MovieContract.TrailerEntry.COLUMN_MOVIE_ID,
-            MovieContract.TrailerEntry.COLUMN_KEY
+            MovieContract.TrailerEntry._ID,
+//            MovieContract.TrailerEntry.COLUMN_MOVIE_ID,
+            MovieContract.TrailerEntry.COLUMN_TRAILER_KEY
     };
 
     private static final String[] REVIEW_COLUMNS = {
-            MovieContract.ReviewEntry.COLUMN_MOVIE_ID,
+            MovieContract.ReviewEntry._ID,
+//            MovieContract.ReviewEntry.COLUMN_MOVIE_ID,
             MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME,
             MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT
+    };
+
+    private static final String[] MOVIE_DETAIL_COLUMNS = {
+            "T1." + MovieContract.MovieEntry._ID + " AS _id",
+            "T1." + MovieContract.MovieEntry.COLUMN_TITLE,
+            "T1." + MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
+            "T1." + MovieContract.MovieEntry.COLUMN_POSTER_PATH,
+            "T1." + MovieContract.MovieEntry.COLUMN_RATING,
+            "T1." + MovieContract.MovieEntry.COLUMN_OVERVIEW,
+            "T2." + MovieContract.TrailerEntry.COLUMN_TRAILER_KEY,
+            "T3." + MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME,
+            "T3." + MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT
     };
 
     private static String movieQuery;
@@ -94,17 +111,17 @@ public class MovieProvider extends ContentProvider {
         // Build Sub querry to fetch data from Movie table based on movieId
         selectMovie = new SQLiteQueryBuilder();
         selectMovie.setTables(MovieContract.MovieEntry.TABLE_NAME);
-        movieQuery = selectMovie.buildQuery(null, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
+        movieQuery = selectMovie.buildQuery(MOVIE_COLUMNS, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
 
         // Build the sub querry for Trailer Table based on movieId
         selectTrailer = new SQLiteQueryBuilder();
         selectTrailer.setTables(MovieContract.TrailerEntry.TABLE_NAME);
-        trailerQuery = selectTrailer.buildQuery(null, MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, "1");
+        trailerQuery = selectTrailer.buildQuery(TRAILER_COLUMNS, MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, "1");
 
         // Builed the sub querry for Review table based on movieId
         selectReview = new SQLiteQueryBuilder();
         selectReview.setTables(MovieContract.ReviewEntry.TABLE_NAME);
-        reviewQuery = selectReview.buildQuery(null, MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
+        reviewQuery = selectReview.buildQuery(REVIEW_COLUMNS, MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
 
         // Final JOIN Querry
         resultSet = new SQLiteQueryBuilder();
@@ -114,7 +131,7 @@ public class MovieProvider extends ContentProvider {
                         "T1." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = T3." + MovieContract.ReviewEntry.COLUMN_MOVIE_ID
         );
 
-        joinQuery = resultSet.buildQuery(null,null,null,null,null,null,null);
+        joinQuery = resultSet.buildQuery(MOVIE_DETAIL_COLUMNS, null, null, null, null, null, null);
     }
 
 
@@ -132,8 +149,7 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_REVIEW, REVIEW);
         matcher.addURI(authority, MovieContract.PATH_REVIEW + "/#", REVIEW_WITH_ID);
 
-        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/details/*", MOVIE_WITH_TRAILER_AND_REVIEW );
-
+        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/details/*", MOVIE_WITH_TRAILER_AND_REVIEW);
 
 
         return matcher;
@@ -260,11 +276,28 @@ public class MovieProvider extends ContentProvider {
                 break;
             }
             // "movie/details/#"
-            case MOVIE_WITH_TRAILER_AND_REVIEW:{
-                String[] args = {MovieEntry.getMovieIdFromUri(uri)};
-                retCursor = mOpenHelper.getReadableDatabase().rawQuery(joinQuery,args);
-                Log.d(LOG_TAG, Integer.toString(retCursor.getCount()));
-                break;
+            case MOVIE_WITH_TRAILER_AND_REVIEW: {
+
+                String movieId = MovieEntry.getMovieIdFromUri(uri);
+                String args[] = {movieId};
+//                retCursor = mOpenHelper.getReadableDatabase().rawQuery(joinQuery, args);
+                Cursor movieCursor = mOpenHelper.getReadableDatabase().rawQuery(movieQuery,args);
+                Cursor trailerCurosor = mOpenHelper.getReadableDatabase().rawQuery(trailerQuery,args);
+                Cursor reviewCursor = mOpenHelper.getReadableDatabase().rawQuery(reviewQuery,args);
+
+                // A movie may not have any trailer. Inorder to help the Merge Cursor result , create a dummy cursor for trailer
+                MatrixCursor helperCursor = new MatrixCursor(TRAILER_COLUMNS );
+                helperCursor.addRow(new Object[]{null, null});
+
+
+
+                if(trailerCurosor.getCount() <= 0) {
+
+                    return new MergeCursor(new Cursor[]{helperCursor,movieCursor,reviewCursor});
+                }
+                else {
+                    return new MergeCursor(new Cursor[]{trailerCurosor,movieCursor,reviewCursor});
+                }
             }
 
             default:

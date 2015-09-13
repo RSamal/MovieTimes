@@ -84,7 +84,7 @@ public class TestUtilites extends AndroidTestCase {
 
         testValues.put(MovieContract.TrailerEntry.COLUMN_MOVIE_ID, 1111);
         testValues.put(MovieContract.TrailerEntry.COLUMN_TRAILER_ID, "Sample");
-        testValues.put(MovieContract.TrailerEntry.COLUMN_KEY, "xyz");
+        testValues.put(MovieContract.TrailerEntry.COLUMN_TRAILER_KEY, "xyz");
 
         return testValues;
     }
@@ -96,7 +96,7 @@ public class TestUtilites extends AndroidTestCase {
         for (int i = 0; i < BULK_INSERT_RECORDS_TO_INSERT; i++) {
             ContentValues values = new ContentValues();
             values.put(MovieContract.TrailerEntry.COLUMN_MOVIE_ID, 1001 + i);
-            values.put(MovieContract.TrailerEntry.COLUMN_KEY, "Key-" + i);
+            values.put(MovieContract.TrailerEntry.COLUMN_TRAILER_KEY, "Key-" + i);
             values.put(MovieContract.TrailerEntry.COLUMN_TRAILER_ID, "Id-" + i);
 
             returnContentValues[i] = values;

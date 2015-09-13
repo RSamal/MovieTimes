@@ -13,10 +13,9 @@
     <string name="prefernce_key_file">com.udacity.movietimes</string>
 
     <!-- API keys and possible values -->
-    <string name="api.sort.key" translatable="false">sortOrder</string>
-    <string name="api.sort.popularity" translatable="false">popularity.desc</string>
-    <string name="api.sort.votes" translatable="false">vote_average.desc</string>
-    <string name="api.image.size.default" translatable="false">w185</string>
+    <string name="sort.key" translatable="false">sortOrder</string>
+    <string name="sort.popularity" translatable="false">popularity.desc</string>
+    <string name="sort.votes" translatable="false">vote_average.desc</string>
 
 
     <!-- SyncAdapter related -->

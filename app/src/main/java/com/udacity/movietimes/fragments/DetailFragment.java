@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.udacity.movietimes.fragments;
 
 
@@ -13,7 +28,9 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieDetailAdapter;
@@ -33,29 +50,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final int DETAIL_LOADER = 0;
     private MovieDetailAdapter movieDetailAdapter;
     private ListView mListView;
-
-    public static final String[] MOVIE_WITH_TRAILER_AND_REVIEW_COLUMNS = {
-            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
-            MovieContract.MovieEntry.COLUMN_TITLE,
-            MovieContract.MovieEntry.COLUMN_POSTER_PATH,
-            MovieContract.MovieEntry.COLUMN_RATING,
-            MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
-            MovieContract.MovieEntry.COLUMN_OVERVIEW,
-            MovieContract.TrailerEntry.COLUMN_KEY,
-            MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME,
-            MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT
-    };
-
-    // Please note that the below contants belongs to the above querry column. Any change in the column need a change in the below index values
-    public static final int COL_MOVIE_ID = 2;
-    public static final int COL_TITLE = 3;
-    public static final int COL_RELEASE_DATE = 4;
-    public static final int COL_POSTER_PATH = 5;
-    public static final int COL_RATING = 6;
-    public static final int COL_OVERVIEW = 7;
-    public static final int COL_KEY = 8;
-    public static final int COL_AUTHOR_NAME = 9;
-    public static final int COL_REVIEW_CONTENT = 10;
+    private TextView favorite;
 
 
     private String movieId;
@@ -70,14 +65,26 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         movieId = getActivity().getIntent().getStringExtra(Intent.EXTRA_STREAM);
-        Log.d(LOG_TAG,movieId);
+
         movieDetailAdapter = new MovieDetailAdapter(getActivity(), null, 0);
 
         mListView = (ListView) view.findViewById(R.id.detail_fragment_listview);
         mListView.setAdapter(movieDetailAdapter);
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
 
         return view;
+    }
+
+    public void doProcessFavorite(View view){
+
+        favorite = (TextView) view;
+        favorite.setText("\uf14a");
     }
 
     @Override
@@ -93,7 +100,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Uri movieDetailUri = MovieContract.MovieEntry.buildMovieDetailUri(Integer.valueOf(movieId));
         return new CursorLoader(getActivity(),
                 movieDetailUri,
-                MOVIE_WITH_TRAILER_AND_REVIEW_COLUMNS,
+                null,
                 null,
                 null,
                 null);

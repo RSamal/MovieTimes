@@ -29,7 +29,7 @@ import android.provider.BaseColumns;
 public final class MovieContract {
 
     // For DbHelper
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "movie.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
@@ -130,8 +130,8 @@ public final class MovieContract {
 
         // Trailer table column name
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_KEY = "title";
-        public static final String COLUMN_TRAILER_ID = "release_date";
+        public static final String COLUMN_TRAILER_KEY = "key";
+        public static final String COLUMN_TRAILER_ID = "trailer_id";
 
 
         //Create statement for the Trailer table
@@ -139,7 +139,7 @@ public final class MovieContract {
                 TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
                 COLUMN_MOVIE_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
-                COLUMN_KEY + TEXT_TYPE + COMMA_SEP +
+                COLUMN_TRAILER_KEY + TEXT_TYPE + COMMA_SEP +
                 COLUMN_TRAILER_ID + TEXT_TYPE + COMMA_SEP +
                 " UNIQUE (" + TrailerEntry.COLUMN_TRAILER_ID + ") ON CONFLICT REPLACE);";
 

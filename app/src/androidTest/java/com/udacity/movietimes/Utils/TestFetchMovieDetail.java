@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 import android.util.Log;
@@ -26,6 +27,12 @@ public class TestFetchMovieDetail extends AndroidTestCase {
     private static SQLiteQueryBuilder selectTrailer = null;
     private static SQLiteQueryBuilder selectReview = null;
 
+
+    private String movieQuery;
+    private String trailerQuery;
+    private String reviewQuery;
+
+
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry.COLUMN_MOVIE_ID,
             MovieContract.MovieEntry.COLUMN_TITLE,
@@ -37,98 +44,129 @@ public class TestFetchMovieDetail extends AndroidTestCase {
 
 
     private static final String[] TRAILER_COLUMNS = {
+            //MovieContract.TrailerEntry._ID,
             MovieContract.TrailerEntry.COLUMN_MOVIE_ID,
-            MovieContract.TrailerEntry.COLUMN_KEY
+            MovieContract.TrailerEntry.COLUMN_TRAILER_KEY
     };
 
     private static final String[] REVIEW_COLUMNS = {
+            // MovieContract.ReviewEntry._ID,
             MovieContract.ReviewEntry.COLUMN_MOVIE_ID,
             MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME,
             MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT
     };
 
-    private  String movieQuery;
-    private String trailerQuery;
-    private  String reviewQuery;
+    private static final String[] MOVIE_DETAIL_COLUMNS = {
+
+            "T1." + MovieContract.MovieEntry.COLUMN_TITLE,
+            "T1." + MovieContract.MovieEntry.COLUMN_POSTER_PATH,
+            "T1." + MovieContract.MovieEntry.COLUMN_RATING,
+            "T1." + MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
+            "T1." + MovieContract.MovieEntry.COLUMN_OVERVIEW,
+            "T2." + MovieContract.TrailerEntry.COLUMN_TRAILER_KEY,
+            "T3." + MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME,
+            "T3." + MovieContract.ReviewEntry.COLUMN_REVIEW_CONTENT
+    };
+
+    public void testSample() {
+//
+      MovieSyncAdapter.syncImmediately(mContext);
 
 
-    public void testFetchPopularMovieDetails() throws InterruptedException {
-
-        mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
-        mContext.getContentResolver().delete(MovieContract.TrailerEntry.CONTENT_URI, null, null);
-        mContext.getContentResolver().delete(MovieContract.ReviewEntry.CONTENT_URI, null, null);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        preferences.edit().putString(
-                mContext.getString(R.string.api_sort_key),
-                mContext.getString(R.string.api_sort_popularity)
-        );
-
-        Thread thread = Thread.currentThread();
-        MovieSyncAdapter.syncImmediately(mContext);
-        Thread.sleep(3000);
-
-        Cursor cursor = mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null, null);
-        assertTrue(cursor.getCount() > 0);
-
-        cursor.moveToFirst();
-        int movieid = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID));
-        Log.d("TESTVALLUES", Integer.toString(movieid));
-        Cursor cursor2 = mContext.getContentResolver().query(MovieContract.TrailerEntry.CONTENT_URI, null, MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " = " + movieid, null, null, null);
-        cursor2.moveToFirst();
-        Log.d("TESTVALLUES", cursor2.getString(cursor.getColumnIndex(MovieContract.TrailerEntry.COLUMN_TRAILER_ID)));
-        Log.d("TESTVALLUES", Integer.toString(cursor2.getCount()));
-
-        Cursor cursor1 = mContext.getContentResolver().query(MovieContract.ReviewEntry.CONTENT_URI,null, MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " = " + movieid, null, null,null);
-        cursor1.moveToFirst();
-        Log.d("TESTVALLUES", cursor1.getString(cursor1.getColumnIndex(MovieContract.ReviewEntry.COLUMN_AUTHOR_NAME)));
-        Log.d("TESTVALLUES", Integer.toString(cursor1.getCount()));
-    }
-
-
-    public void testSample(){
-
-
-        selectMovie = new SQLiteQueryBuilder();
-        selectMovie.setTables(MovieContract.MovieEntry.TABLE_NAME);
-        movieQuery = selectMovie.buildQuery(null, MovieContract.MovieEntry.COLUMN_MOVIE_ID  + " = ?", null, null, null, null);
-        Log.d("HELLOD",movieQuery);
-        selectTrailer = new SQLiteQueryBuilder();
-        selectTrailer.setTables(MovieContract.TrailerEntry.TABLE_NAME);
-        trailerQuery = selectTrailer.buildQuery(null, MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " = ?", null, null, null,"1");
-
-
-        selectReview = new SQLiteQueryBuilder();
-        selectReview.setTables(MovieContract.ReviewEntry.TABLE_NAME);
-        reviewQuery = selectReview.buildQuery(null, MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " = ?",null,null,null,null);
-
-        resultSet = new SQLiteQueryBuilder();
-        Log.d("HELLOD",trailerQuery);
-        resultSet.setTables("(" + movieQuery + ") T1 LEFT JOIN (" + trailerQuery + ") T2 ON " +
-                        "T1." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = T2." + MovieContract.TrailerEntry.COLUMN_MOVIE_ID
-                        + " LEFT JOIN (" + reviewQuery + ") T3 ON " +
-                        "T1." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = T3." + MovieContract.ReviewEntry.COLUMN_MOVIE_ID
-        );
-
-        String finalQuery = resultSet.buildQuery(null,null,null,null,null,null,null);
-        String[] args = {"76341","76341","76341"};
+//
+//        MovieDbHelper helper = new MovieDbHelper(mContext);
+//        SQLiteDatabase database = helper.getReadableDatabase();
+//        selectMovie = new SQLiteQueryBuilder();
+//        selectMovie.setTables(MovieContract.MovieEntry.TABLE_NAME);
+//        movieQuery = selectMovie.buildQuery(MOVIE_COLUMNS, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
+////        Log.d("JOINTEST", movieQuery);
+//        String[] args = {"76341"};
+//        Cursor cursor = database.rawQuery(movieQuery, args);
+//        cursor.moveToFirst();
+////        Log.d("JOINTEST", cursor.getString(0));
+////        Log.d("JOINTEST", cursor.getString(1));
+////        Log.d("JOINTEST", cursor.getString(2));
+////        Log.d("JOINTEST", cursor.getString(3));
+////        Log.d("JOINTEST", cursor.getString(4));
+////        Log.d("JOINTEST", cursor.getString(5));
+//
+//
+//
+//        selectTrailer = new SQLiteQueryBuilder();
+//        selectTrailer.setTables(MovieContract.TrailerEntry.TABLE_NAME);
+//        trailerQuery = selectTrailer.buildQuery(TRAILER_COLUMNS, MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, "1");
+//
+//        Log.d("JOINTEST", trailerQuery);
+//        cursor = database.rawQuery(trailerQuery, args);
+//        cursor.moveToFirst();
+//
+//        do {
+//            Log.d("JOINTEST", cursor.getString(0));
+//            Log.d("JOINTEST", cursor.getString(1));
+//        } while (cursor.moveToNext());
+//
+//
+//        selectReview = new SQLiteQueryBuilder();
+//        selectReview.setTables(MovieContract.ReviewEntry.TABLE_NAME);
+//        reviewQuery = selectReview.buildQuery(REVIEW_COLUMNS, MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " = ?", null, null, null, null);
+//
+//        Log.d("JOINTEST", reviewQuery);
+//        cursor = database.rawQuery(reviewQuery, args);
+//        cursor.moveToFirst();
+//
+//        do {
+//            Log.d("JOINTEST", cursor.getString(0));
+//            Log.d("JOINTEST", cursor.getString(1));
+//            Log.d("JOINTEST", cursor.getString(2));
+//        } while (cursor.moveToNext());
+//
+////        Log.d("JOINTEST","You are here");
+////        resultSet = new SQLiteQueryBuilder();
+////        resultSet.setTables("(" + movieQuery + ") T1 LEFT JOIN (" + trailerQuery + ") T2 ON " +
+////                        "T1." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = T2." + MovieContract.TrailerEntry.COLUMN_MOVIE_ID
+////                        + " LEFT JOIN (" + reviewQuery + ") T3 ON " +
+////                        "T1." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = T3." + MovieContract.ReviewEntry.COLUMN_MOVIE_ID
+////        );
+////        String[] joinArg = {"76341","76341","76341"};
+////        String finalQuery = resultSet.buildQuery(MOVIE_DETAIL_COLUMNS, null, null, null, null, null, null);
+////        Log.d("JOINTEST", finalQuery);
+////        cursor = database.rawQuery(finalQuery, joinArg);
 
 
-        MovieDbHelper helper = new MovieDbHelper(mContext);
-        SQLiteDatabase database = helper.getReadableDatabase();
+//        Uri uri = MovieContract.MovieEntry.buildMovieDetailUri(53189);
+//        Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null, null);
+//        cursor.moveToFirst();
 
-        Cursor cursor = database.rawQuery(finalQuery, args);
+
+//        do {
+//            Log.d("JOINTEST", "Cursor-->" + cursor.getPosition());
+//            if (cursor.getPosition() == 0) {
+//                Log.d("JOINTEST", cursor.getString(0));
+//                Log.d("JOINTEST", cursor.getString(1));
+//                Log.d("JOINTEST", cursor.getString(2));
+//                Log.d("JOINTEST", cursor.getString(3));
+//                Log.d("JOINTEST", cursor.getString(4));
+//                Log.d("JOINTEST", cursor.getString(5));
+//                Thread.currentThread().wait(2000);
+//
+//            } else {
+//                Log.d("JOINTEST", cursor.getString(1));
+//
+//            }
+//        } while (cursor.moveToNext());
         //Cursor cursor = database.rawQuery(reviewQuery,args);
 
-        Log.d("HELLOD",finalQuery);
-        Log.d("HELLOD",Integer.toString(cursor.getCount()));
-
-        cursor.moveToFirst();
-        cursor.moveToNext();
-
-        Log.d("HELLOD", cursor.getString(18));
-
-
+//
+//
+//        MovieDbHelper helper = new MovieDbHelper(mContext);
+//        SQLiteDatabase database = helper.getReadableDatabase();
+//
+//        Cursor cursor = database.rawQuery(finalQuery, args);
+//        //Cursor cursor = database.rawQuery(reviewQuery,args);
+//
+//        Log.d("HELLOD",finalQuery);
+//        Log.d("HELLOD",Integer.toString(cursor.getCount()));
+//
 
 
     }

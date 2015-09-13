@@ -15,5 +15,6 @@
     <color name="tabIndicatorColor">#FFFFFF</color>
 
     <color name="ratingStar">#9f9f9f</color>
+    <color name="favorite">#B71C1C</color>
 
 </resources>

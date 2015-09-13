@@ -122,9 +122,6 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
                 Cursor cursor = (Cursor) mMovieListAdapter.getItem(position);
                 if (cursor != null) {
                     Intent intent = new Intent(getActivity().getApplicationContext(), DetailActivity.class);
-                    Log.d(LOG_TAG,Integer.toString(MovieUtility.COL_MOVIE_ID));
-                    Log.d(LOG_TAG,Integer.toString(cursor.getCount()));
-                    Log.d(LOG_TAG, cursor.getString(MovieUtility.COL_MOVIE_ID));
                     intent.putExtra(Intent.EXTRA_STREAM, cursor.getString(MovieUtility.COL_MOVIE_ID));
                     startActivity(intent);
 

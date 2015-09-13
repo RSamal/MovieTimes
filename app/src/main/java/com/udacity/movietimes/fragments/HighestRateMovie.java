@@ -137,7 +137,6 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.d("LOOOO",Integer.toString(cursor.getCount()));
         mMovieListAdapter.swapCursor(cursor);
     }
 
