@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.activities.DetailActivity;
@@ -59,6 +60,7 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
     private static final int HIGH_RATE_MOVIE_LOADER = 0;
 
     private GridView mGridView;
+    private ProgressBar progressBar;
     private MovieListAdapter mMovieListAdapter;
     private List<Movie> movieList;
 
@@ -89,6 +91,7 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
+        progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
         mGridView.setAdapter(mMovieListAdapter);
 
@@ -115,6 +118,7 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        progressBar.setVisibility(View.VISIBLE);
         getLoaderManager().initLoader(HIGH_RATE_MOVIE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -137,6 +141,10 @@ public class HighestRateMovie extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor.getCount() > 0) {
+            progressBar.setVisibility(View.GONE);
+            mGridView.setVisibility(View.VISIBLE);
+        }
         mMovieListAdapter.swapCursor(cursor);
     }
 

@@ -28,6 +28,7 @@ import android.view.MenuItem;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.adapter.MovieSelectAdapter;
+import com.udacity.movietimes.fragments.DetailFragment;
 import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.sync.MovieSyncAdapter;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolBar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    private boolean mTwoPane;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,6 +77,19 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize the MovieSyncAdapter
         MovieSyncAdapter.initializeSyncAdapter(this);
+
+        if(findViewById(R.id.detail_fragment_container) != null){
+            mTwoPane = true;
+            if (savedInstanceState == null){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.detail_fragment_container, new DetailFragment())
+                        .commit();
+            }
+        }
+        else
+        {
+            mTwoPane = false;
+        }
 
         /** Setup Toolbar as an AppBar */
         mToolBar = (Toolbar) findViewById(R.id.tool_bar);

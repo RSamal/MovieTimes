@@ -7,7 +7,7 @@
 
 
     <fragment android:name="com.udacity.movietimes.fragments.DetailFragment"
-        android:id="@+id/detail_fragment"
+        android:id="@+id/detail_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <!-- Include the Toolbar as an AppBar -->

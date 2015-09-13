@@ -15,12 +15,17 @@ package com.udacity.movietimes.adapter;
  * limitations under the License.
  */
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.widget.CursorAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +34,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.udacity.movietimes.R;
+import com.udacity.movietimes.database.MovieContract;
+import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.utils.MovieUrl;
 
 /**
@@ -55,6 +63,7 @@ public class MovieDetailAdapter extends CursorAdapter {
     /**
      * Cursor Data From Movie Table for a movieId. Ignoring the First Index 0 as it is _id
      */
+    public static final int COL_ID = 0;
     public static final int COL_TITLE = 1;
     public static final int COL_RELEASE_DATE = 2;
     public static final int COL_POSTER = 3;
@@ -115,12 +124,14 @@ public class MovieDetailAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
 
 
         int viewType = getItemViewType(cursor.getPosition());
         switch (viewType) {
             case VIEW_TYPE_MOVIE_BODY: {
+
+
                 final MovieViewHolder viewHolder = (MovieViewHolder) view.getTag();
 
                 // Set the poster of the movie
@@ -136,10 +147,9 @@ public class MovieDetailAdapter extends CursorAdapter {
                 // Set the title of the movie
                 viewHolder.title.setText(cursor.getString(COL_TITLE));
 
-                // set the favorite button of the movie
-                Typeface fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome.ttf");
-                viewHolder.favorite.setTypeface(fontFamily);
-                viewHolder.favorite.setText("\uf196");
+                // Set the favorite button ON/OFF
+                updateFavoriteButton(viewHolder,context,cursor);
+
 
                 // Set the Release date of the movie
 
@@ -202,6 +212,48 @@ public class MovieDetailAdapter extends CursorAdapter {
     @Override
     public int getViewTypeCount() {
         return VIEW_TYPE_COUNT;
+    }
+
+
+    public void updateFavoriteButton(final MovieViewHolder viewHolder, final Context context, final Cursor cursor){
+        // set the favorite button of the movie. First we check in the database if the favorite column
+        // is Y or N. Based on that we switch the indicator as well as update the data in Movie DB.
+        // Its basically act like a switch to update favorite column in the Movie Table
+        Uri uri = MovieContract.MovieEntry.buildMovieWithMovieId(cursor.getLong(COL_ID));
+        Cursor temp = context.getContentResolver().query(uri, null, null, null, null, null);
+        temp.moveToFirst();
+        final ContentValues values = new ContentValues();
+        DatabaseUtils.cursorRowToContentValues(temp, values);
+
+        Typeface fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome.ttf");
+        viewHolder.favorite.setTypeface(fontFamily);
+
+        if(values.get(MovieContract.MovieEntry.COLUMN_FAVORITE).equals("N")){
+            viewHolder.favorite.setText("\uf196");
+        }else {
+            viewHolder.favorite.setText("\uf14a");
+        }
+
+        viewHolder.favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String movieId = (String) values.get(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
+                if(values.get(MovieContract.MovieEntry.COLUMN_FAVORITE).equals("N")){
+                    values.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "Y");
+                    viewHolder.favorite.setText("\uf14a");
+
+                } else {
+                    values.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "N");
+                    viewHolder.favorite.setText("\uf196");
+
+                }
+                context.getContentResolver().update(MovieContract.MovieEntry.CONTENT_URI, values, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                        new String[]{movieId});
+
+            }
+        });
+
     }
 
     // This is Markup interface for Movie Data structures

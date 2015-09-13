@@ -71,13 +71,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mListView = (ListView) view.findViewById(R.id.detail_fragment_listview);
         mListView.setAdapter(movieDetailAdapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
         return view;
     }
 

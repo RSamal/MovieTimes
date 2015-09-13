@@ -35,6 +35,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.udacity.movietimes.R;
 import com.udacity.movietimes.activities.DetailActivity;
@@ -42,6 +44,7 @@ import com.udacity.movietimes.adapter.MovieListAdapter;
 import com.udacity.movietimes.database.MovieContract;
 import com.udacity.movietimes.model.Movie;
 import com.udacity.movietimes.sync.MovieSyncAdapter;
+
 import com.udacity.movietimes.utils.MovieUtility;
 
 
@@ -56,12 +59,14 @@ import java.util.List;
 public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
-    private static final String TAG = FavoriteMovie.class.getSimpleName();
-    private static final int FAV_MOVIE_LOADER = 0;
+    private static final String LOG_TAG = PopularMovie.class.getSimpleName();
+    private static final int MOVIE_LOADER = 0;
 
     private GridView mGridView;
     private MovieListAdapter mMovieListAdapter;
     private List<Movie> movieList;
+    private TextView favorite;
+    private ProgressBar progressBar;
 
 
     public FavoriteMovie() {
@@ -98,10 +103,6 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateMovie() {
-        MovieSyncAdapter.syncImmediately(getActivity());
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -111,9 +112,13 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+        progressBar.setVisibility(View.INVISIBLE);
 
         mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
         mGridView.setAdapter(mMovieListAdapter);
+
+
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,15 +133,19 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
             }
         });
 
-
         return view;
+    }
 
+
+    public void updateMovie(){
+        MovieSyncAdapter.syncImmediately(getActivity());
     }
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(FAV_MOVIE_LOADER, null, this);
+
+        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -150,7 +159,7 @@ public class FavoriteMovie extends Fragment implements LoaderManager.LoaderCallb
                 MovieContract.MovieEntry.CONTENT_URI,
                 MovieUtility.MOVIE_COLUMNS,
                 MovieContract.MovieEntry.COLUMN_FAVORITE + " = ?",
-                null,
+                selectionArgs,
                 null
         );
 

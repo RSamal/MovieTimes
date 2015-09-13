@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.udacity.movietimes.R;
@@ -65,7 +66,7 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
     private MovieListAdapter mMovieListAdapter;
     private List<Movie> movieList;
     private TextView favorite;
-
+    private ProgressBar progressBar;
 
     public PopularMovie() {
         // Required empty public constructor
@@ -111,6 +112,8 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
+        progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+
         mGridView = (GridView) view.findViewById(R.id.movie_fragment_gridview);
         mGridView.setAdapter(mMovieListAdapter);
 
@@ -140,6 +143,7 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        progressBar.setVisibility(View.VISIBLE);
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -162,6 +166,10 @@ public class PopularMovie extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor.getCount() > 0) {
+            progressBar.setVisibility(View.GONE);
+            mGridView.setVisibility(View.VISIBLE);
+        }
         mMovieListAdapter.swapCursor(cursor);
     }
 

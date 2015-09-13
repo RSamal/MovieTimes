@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:layout_toLeftOf="@+id/movie_fragment_movie_favorite"
             android:layout_toRightOf="@id/movie_fragment_movie_poster"
             android:fontFamily="sans-serif-medium"
             android:textAppearance="@android:style/TextAppearance.Material.WindowTitle"
@@ -40,7 +41,6 @@
             android:layout_alignBaseline="@+id/movie_fragment_movie_title"
             android:layout_alignBottom="@+id/movie_fragment_movie_title"
             android:textColor="@color/favorite"
-            android:onClick="doProcessFavorite"
             android:textSize="28sp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true" />

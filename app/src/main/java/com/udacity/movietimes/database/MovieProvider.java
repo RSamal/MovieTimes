@@ -402,6 +402,7 @@ public class MovieProvider extends ContentProvider {
         }
 
         if (rowUpdated != 0) {
+            Log.d(LOG_TAG,"Row update" + rowUpdated);
             getContext().getContentResolver().notifyChange(uri, null);
         }
         db.close();

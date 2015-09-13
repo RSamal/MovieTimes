@@ -73,28 +73,31 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 for (final Movie movie : movieList) {
 
-                    Log.d(LOG_TAG, "Movie Id: " + movie.getmId());
+                    Log.d(LOG_TAG, "High Movie Id: " + movie.getmId());
 
                     apiService.getMovieTrailers(movie.getmId(), new Callback<Trailer>() {
                                 @Override
                                 public void success(Trailer trailer, Response response) {
                                     MovieUtility.storeTrailers(getContext(), movie.getmId(), trailer.getTrailerList());
 
+                                    for (int i = 0; i < trailer.getTrailerList().size(); i++) {
+
+                                        Log.d(LOG_TAG, "High Movie Id: " + trailer.getTrailerList().get(i).getKey() + movie.getmId());
+                                    }
+
+                                    if (trailer.getTrailerList().size() == 0) {
+                                        Log.d(LOG_TAG, movie.getmId() + "No Trailer Found");
+                                    }
                                 }
 
                                 @Override
                                 public void failure(RetrofitError error) {
-
+                                    Log.d(LOG_TAG, movie.getmId() + "Error loading trailer");
                                 }
                             }
 
                     );
 
-                    try {
-                        Thread.currentThread().sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     apiService.getMovieReviews(movie.getmId(), new Callback<Reviews>()
 
                             {
